@@ -1,0 +1,17 @@
+﻿@using System.Text.Json;
+@model UserInfoViewModel;
+
+@{
+}
+
+<pre>
+	@JsonSerializer.Serialize(Model.AppUser, new JsonSerializerOptions() { WriteIndented = true });
+	
+</pre>
+
+<br />
+<hr />
+
+<pre>
+	@JsonSerializer.Serialize(Model.UserViewModel, new JsonSerializerOptions() { WriteIndented = true });
+</pre>

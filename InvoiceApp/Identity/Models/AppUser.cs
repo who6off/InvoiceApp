@@ -1,10 +1,21 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InvoiceApp.Identity.Models
 {
-    public class AppUser : IdentityUser
-    {
-        public string FirstName { get; set; }
-        public string SecondName { get; set; }
-    }
+	public class AppUser : IdentityUser
+	{
+		[Required]
+		[StringLength(50, MinimumLength = 2)]
+		public string Name { get; set; }
+
+		[Required]
+		[StringLength(100, MinimumLength = 2)]
+		public string Surname { get; set; }
+
+		[Required]
+		[Column(TypeName = "date")]
+		public DateTime DateObBirth { get; set; }
+	}
 }
