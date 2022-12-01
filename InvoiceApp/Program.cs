@@ -58,29 +58,25 @@ namespace InvoiceApp
 				name: "default",
 				pattern: "{controller=Home}/{action=Index}/{id?}");
 
+
 			ServiceAccessor.Services = app.Services;
 
-			//Task.Run(async () =>
-			//{
-			//	try
-			//	{
-			//		var roleManager = app.Services.GetService<RoleManager<IdentityRole>>();
-			//		foreach (var item in UserRoles.GetAll())
-			//		{
-			//			await roleManager.CreateAsync(new IdentityRole(item));
-			//		}
-			//	}
-			//	catch (Exception e)
-			//	{
-			//		Console.WriteLine(e.Message);
-			//	}
-			//})
-			//.ContinueWith(_ =>
-			//{
-			//	app.Run();
-			//});
-
-			app.Run();
+			Task.Run(async () =>
+			{
+				try
+				{
+					await IdentityDbInitializer.Initialize(app.Services);
+				}
+				catch (Exception e)
+				{
+					Console.WriteLine(e.Message);
+				}
+			})
+			.ContinueWith(_ =>
+			{
+				app.Run();
+			})
+			.Wait();
 		}
 	}
 }
