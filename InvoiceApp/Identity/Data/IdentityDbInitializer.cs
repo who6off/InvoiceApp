@@ -10,8 +10,8 @@ namespace InvoiceApp.Identity.Data
 		public static async Task Initialize(IServiceProvider serviceProvider)
 		{
 			var options = serviceProvider.GetService<IConfiguration>()?
-				.GetSection(IdentityDbInitializerOtions.SectionName)
-				.Get<IdentityDbInitializerOtions>();
+				.GetSection(IdentityDbInitializerOptions.SectionName)
+				.Get<IdentityDbInitializerOptions>();
 
 			if (!options.IsDataSeedingRequired) return;
 
@@ -24,7 +24,7 @@ namespace InvoiceApp.Identity.Data
 		}
 
 
-		private static async Task<IdentityResult[]> SeedRoles(IServiceScope scope, IdentityDbInitializerOtions options)
+		private static async Task<IdentityResult[]> SeedRoles(IServiceScope scope, IdentityDbInitializerOptions options)
 		{
 			var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
 
@@ -38,7 +38,7 @@ namespace InvoiceApp.Identity.Data
 		}
 
 
-		private static Task<AppUser?> SeedAdmin(IServiceScope scope, IdentityDbInitializerOtions options)
+		private static Task<AppUser?> SeedAdmin(IServiceScope scope, IdentityDbInitializerOptions options)
 		{
 			var userService = scope.ServiceProvider.GetService<IUserService>();
 
@@ -55,7 +55,8 @@ namespace InvoiceApp.Identity.Data
 	}
 
 
-	public class IdentityDbInitializerOtions
+
+	public class IdentityDbInitializerOptions
 	{
 		public const string SectionName = "Identity";
 		public bool IsDataSeedingRequired { get; set; }

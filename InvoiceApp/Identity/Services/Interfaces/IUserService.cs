@@ -5,6 +5,7 @@ namespace InvoiceApp.Identity.Services.Interfaces
 {
 	public interface IUserService
 	{
+		public Task<AppUser[]> GetAll();
 		public Task<AppUser?> CreateUser(UserViewModel model);
 	}
 }

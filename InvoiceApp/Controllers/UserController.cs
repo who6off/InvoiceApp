@@ -1,6 +1,6 @@
 ﻿using InvoiceApp.Identity.Services.Interfaces;
 using InvoiceApp.Identity.ViewModels;
-using InvoiceApp.ViewModels;
+using InvoiceApp.ViewModels.User;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvoiceApp.Controllers
@@ -15,15 +15,18 @@ namespace InvoiceApp.Controllers
 		}
 
 
+		public IActionResult Index() => View();
+
+
 		[HttpGet]
-		public async Task<IActionResult> Index()
+		public async Task<IActionResult> Create()
 		{
 			return View(new UserViewModel());
 		}
 
 
 		[HttpPost]
-		public async Task<IActionResult> Index(UserViewModel model)
+		public async Task<IActionResult> Create(UserViewModel model)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -36,5 +39,14 @@ namespace InvoiceApp.Controllers
 		}
 
 
+		[HttpGet]
+		public async Task<IActionResult> Edit()
+		{
+			var users = await _userService.GetAll();
+			return View(new UserEditViewModel()
+			{
+				Users = users,
+			});
+		}
 	}
 }
