@@ -17,5 +17,9 @@ namespace InvoiceApp.Identity.Models
 		[Required]
 		[Column(TypeName = "date")]
 		public DateTime DateObBirth { get; set; }
+
+		public string? RoleName { get => UserRoles.FirstOrDefault()?.Role.Name; }
+
+		public virtual ICollection<UserRole> UserRoles { get; set; }
 	}
 }

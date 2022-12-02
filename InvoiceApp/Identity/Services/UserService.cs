@@ -10,20 +10,22 @@ namespace InvoiceApp.Identity.Services
     public class UserService : IUserService
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
 
         public UserService(
-            UserManager<AppUser> userManager,
-            RoleManager<IdentityRole> roleManager)
+            UserManager<AppUser> userManager)
         {
             _userManager = userManager;
-            _roleManager = roleManager;
         }
 
 
         public async Task<AppUser[]> GetAll()
         {
-            return await _userManager.Users.ToArrayAsync();
+            var users = await _userManager.Users
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .ToArrayAsync();
+
+            return users;
         }
 
 
@@ -43,11 +45,6 @@ namespace InvoiceApp.Identity.Services
             if (result.Succeeded)
             {
                 var newUser = await _userManager.FindByEmailAsync(model.Email);
-
-                if (!(await _roleManager.RoleExistsAsync(model.Role)))
-                {
-                    await _roleManager.CreateAsync(new IdentityRole(model.Role));
-                }
 
                 var roleResult = await _userManager.AddToRoleAsync(newUser, model.Role);
                 return newUser;
