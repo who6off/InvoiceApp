@@ -7,8 +7,8 @@
 }
 
 <form 
-	asp-controller="@ViewData["UserFormController"]"
-	asp-action="@ViewData["UserFormAction"]" method="post"
+	asp-controller="@ViewData["Controller"]"
+	asp-action="@ViewData["Action"]" method="post"
 	class="container d-grid gap-3 p-2 card"
 >
 	<input asp-for="@Model.Id" type="hidden" value="@Model.Id" />
@@ -85,7 +85,7 @@
 
 	<div class="row form-group gy-1">
 		<div class="col-12 text-end">
-			<input type="submit" value="@ViewData["UserFormButtonName"]" class="btn btn-primary" />
+			<input type="submit" value="@ViewData["ButtonName"]" class="btn btn-primary" />
 		</div>
 	</div>
 </form>

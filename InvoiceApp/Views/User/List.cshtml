@@ -1,0 +1,36 @@
+﻿@using InvoiceApp.ViewModels.User
+
+@model UserEditViewModel;
+
+@{
+
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Surname</th>
+            <th scope="col">Email</th>
+            <th scope="col">Date of birth</th>
+            <th scope="col">Role</th>
+			<th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.Name</td>
+                <td>@user.Surname</td>
+                <td>@user.Email</td>
+                <td>@user.DateObBirth.ToString("yyyy-MM-dd")</td>
+                <td>@user.RoleName</td>
+                <td> 
+                    <a asp-controller="User" asp-action="Edit" asp-route-id="@user.Id" class="btn btn-warning">Edit</a> 
+                    <a class="btn btn-danger">Delete</a> 
+                </td>
+             </tr>
+        }
+    </tbody>
+</table>

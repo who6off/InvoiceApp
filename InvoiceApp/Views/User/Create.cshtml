@@ -1,92 +1,10 @@
-﻿@model InvoiceApp.Identity.ViewModels.UserViewModel;
-@using InvoiceApp.Identity.Constants
+﻿@using InvoiceApp.Identity.ViewModels;
+@model UserViewModel;
 
-@{
-	var roleSelectList = new SelectList(UserRoles.GetAll());
-	var date = Model.DateOfBirth.ToString("yyyy-MM-dd");
-}
 
 <h2>Create new user</h2>
 
-<form asp-controller="User" asp-action="Create" method="post" class="container d-grid gap-3 p-2 card">
-	<div class="row form-group gy-1">
-		<div class="col-2">
-			<label asp-for="@Model.Name">Name: </label>
-		</div>
-		<div class="col-10">
-			<input asp-for="@Model.Name" type="text" value="@Model.Name" class="form-control" />
-			<span asp-validation-for="@Model.Name" class="text-danger"></span>
-		</div>
-	</div>
-
-	<div class="row form-group gy-1">
-		<div class="col-2">
-			<label asp-for="@Model.Surname">Surname: </label>
-		</div>
-		<div class="col-10">
-			<input asp-for="@Model.Surname" type="text" value="@Model.Surname" class="form-control" />
-			<span asp-validation-for="@Model.Surname" class="text-danger"></span>
-		</div>
-	</div>
-
-	<div class="row form-group gy-1">
-		<div class="col-2">
-			<label asp-for="@Model.DateOfBirth">Date of birth: </label>
-		</div>
-		<div class="col-10">
-			<input asp-for="@Model.DateOfBirth" type="date" value="@date" class="form-control"/>
-			<span asp-validation-for="@Model.DateOfBirth" class="text-danger"></span>
-		</div>
-	</div>
-
-	<div class="row form-group gy-1">
-		<div class="col-2">
-			<label asp-for="@Model.Email" for="email">Email: </label>
-		</div>
-		<div class="col-10">
-			<input asp-for="@Model.Email" type="email" value="@Model.Email" class="form-control" />
-			<span asp-validation-for="@Model.Email" class="text-danger"></span>
-		</div>	
-	</div>
-
-	<div class="row form-group gy-1">
-		<div class="col-2">
-			<label asp-for="@Model.Password" for="password">Password: </label>
-		</div>
-		<div class="col-10">
-			<input asp-for="@Model.Password" type="password" value="@Model.Password" class="form-control" />
-			<span asp-validation-for="@Model.Password" class="text-danger"></span>
-		</div>	
-	</div>
-
-	<div class="row form-group gy-1">
-		<div class="col-2">
-			<label asp-for="@Model.PasswordRepeat" for="repeat-password">Repeat password: </label>
-		</div>
-		<div class="col-10">
-			<input asp-for="@Model.PasswordRepeat" type="password" value="@Model.PasswordRepeat" class="form-control" />
-			<span asp-validation-for="@Model.PasswordRepeat" class="text-danger"></span>
-		</div>	
-	</div>
-
-	<div class="row form-group gy-1">
-		<div class="col-2">
-			<label asp-for="@Model.Role">Role: </label>
-		</div>
-		<div class="col-10">
-			<select asp-for="@Model.Role" asp-items="@roleSelectList" value="@Model.Role" class="form-control"></select>
-			<span class="text-danger"></span>
-		</div>
-	</div>
-
-	<div class="row form-group gy-1">
-		<div class="col-12 text-end">
-			<input type="submit" value="Create" class="btn btn-primary"/>
-		</div>
-	</div>
-</form>
-
-
-@section Styles{
-	<link rel="stylesheet" href="~/css/validation.css" asp-append-version="true" />
-}
+@await Html.PartialAsync("_UserForm", Model, new ViewDataDictionary(ViewData)
+{
+	{"Controller", "User"}, {"Action", "Create"}, {"ButtonName", "Create"}
+})

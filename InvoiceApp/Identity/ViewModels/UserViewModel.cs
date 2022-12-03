@@ -25,12 +25,12 @@ namespace InvoiceApp.Identity.ViewModels
 		[Required(ErrorMessage = "Input the date of birth")]
 		public DateTime DateOfBirth { get; set; } = DateTime.Now;
 
-		[Required(ErrorMessage = "Input the password")]
-		public string Password { get; set; }
+		//[Required(ErrorMessage = "Input the password")]
+		public string? Password { get; set; }
 
-		[Required(ErrorMessage = "Repeat your password")]
-		[Compare("Password", ErrorMessage = "Passwords must be equal")]
-		public string PasswordRepeat { get; set; }
+		//[Required(ErrorMessage = "Repeat the password")]
+		//[Compare("Password", ErrorMessage = "Passwords must be equal")]
+		public string? PasswordRepeat { get; set; }
 
 		[Required(ErrorMessage = "Choose the role")]
 		public string Role { get; set; }
@@ -40,27 +40,49 @@ namespace InvoiceApp.Identity.ViewModels
 			var errors = new List<ValidationResult>();
 			var minAge = validationContext.GetService<IConfiguration>().GetMinEmployeeAge();
 			var userManager = validationContext.GetService<UserManager<AppUser>>();
-			var validators = userManager?.PasswordValidators;
 
-			if (validators is not null)
+			if (string.IsNullOrEmpty(Id) || (!string.IsNullOrEmpty(Id) && !string.IsNullOrEmpty(Password)))
 			{
-				foreach (var validator in validators)
+				if (string.IsNullOrEmpty(Password))
 				{
-					var result = validator.ValidateAsync(userManager, null, Password).GetAwaiter().GetResult();
-					if (!result.Succeeded)
+					errors.Add(new ValidationResult("Input the password", new string[] { "Password" }));
+				}
+				else
+				{
+					var validators = userManager?.PasswordValidators;
+					if (validators is not null)
 					{
-						foreach (var error in result.Errors)
+						foreach (var validator in validators)
 						{
-							errors.Add(new ValidationResult(error.Description, new string[] { "Password" }));
+							var result = validator.ValidateAsync(userManager, null, Password).GetAwaiter().GetResult();
+							if (!result.Succeeded)
+							{
+								foreach (var error in result.Errors)
+								{
+									errors.Add(new ValidationResult(error.Description, new string[] { "Password" }));
+								}
+							}
 						}
 					}
 				}
+
+				if (string.IsNullOrEmpty(PasswordRepeat))
+					errors.Add(new ValidationResult("Repeat the password", new string[] { "PasswordRepeat" }));
+
+				if (Password != PasswordRepeat)
+					errors.Add(new ValidationResult("Passwords must be equal", new string[] { "PasswordRepeat" }));
 			}
 
-			if (userManager.FindByEmailAsync(Email).GetAwaiter().GetResult() is not null)
+
+			var userWithCurrentEmail = userManager.FindByEmailAsync(Email).GetAwaiter().GetResult();
+			if (
+				(userWithCurrentEmail is not null) &&
+				(Id != userWithCurrentEmail.Id)
+			)
 			{
 				errors.Add(new ValidationResult("This Email is already used", new string[] { "Email" }));
 			}
+
 
 			if (!UserRoles.GetAll().Contains(Role))
 			{
@@ -68,8 +90,7 @@ namespace InvoiceApp.Identity.ViewModels
 			}
 
 
-			var diff = DateTime.Now.GetYearDifference(DateOfBirth);
-			if (diff < minAge)
+			if (DateTime.Now.GetYearDifference(DateOfBirth) < minAge)
 			{
 				errors.Add(new ValidationResult($"User must be older than {minAge}", new string[] { "DateOfBirth" }));
 			}

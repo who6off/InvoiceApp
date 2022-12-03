@@ -21,7 +21,7 @@ namespace InvoiceApp.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Create()
 		{
-			return View("CreateTest", new UserViewModel());
+			return View(new UserViewModel());
 		}
 
 
@@ -30,23 +30,58 @@ namespace InvoiceApp.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
-				return View("CreateTest", model);
+				return View(model);
 			}
 
-			var newUser = await _userService.CreateUser(model);
+			var newUser = await _userService.Create(model);
 
 			return View("UserInfo", new UserInfoViewModel(newUser, model));
 		}
 
 
 		[HttpGet]
-		public async Task<IActionResult> Edit()
+		public async Task<IActionResult> List()
 		{
 			var users = await _userService.GetAll();
 			return View(new UserEditViewModel()
 			{
 				Users = users,
 			});
+		}
+
+
+		[HttpGet]
+		[Route("{action}/{id:required}")]
+		public async Task<IActionResult> Edit(string id)
+		{
+			var user = await _userService.GetById(id);
+
+			if (user is null)
+				return RedirectToAction(nameof(List));
+
+			return View(new UserViewModel()
+			{
+				Id = user.Id,
+				Name = user.Name,
+				Surname = user.Surname,
+				DateOfBirth = user.DateObBirth,
+				Email = user.Email,
+				Role = user.RoleName
+			});
+		}
+
+
+		[HttpPost]
+		public async Task<IActionResult> EditPost(UserViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View("Edit", model);
+			}
+
+			var newUser = await _userService.Update(model);
+
+			return RedirectToAction(nameof(List));
 		}
 	}
 }
