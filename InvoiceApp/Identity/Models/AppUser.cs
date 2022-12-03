@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace InvoiceApp.Identity.Models
 {
@@ -20,6 +21,7 @@ namespace InvoiceApp.Identity.Models
 
 		public string? RoleName { get => UserRoles.FirstOrDefault()?.Role.Name; }
 
+		[JsonIgnore]
 		public virtual ICollection<UserRole> UserRoles { get; set; }
 	}
 }

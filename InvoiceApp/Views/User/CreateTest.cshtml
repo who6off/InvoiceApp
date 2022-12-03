@@ -1,0 +1,13 @@
+﻿@using InvoiceApp.Identity.ViewModels;
+@model UserViewModel;
+
+@{
+	ViewData["UserFormController"] = "User";
+	ViewData["UserFormAction"] = "Create";
+	ViewData["UserFormButtonName"] = "Create";
+}
+
+<h2>CreateTest</h2>
+<h2>Create new user</h2>
+
+@await Html.PartialAsync("_UserForm", Model)

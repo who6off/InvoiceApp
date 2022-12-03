@@ -21,7 +21,7 @@ namespace InvoiceApp.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Create()
 		{
-			return View(new UserViewModel());
+			return View("CreateTest", new UserViewModel());
 		}
 
 
@@ -30,7 +30,7 @@ namespace InvoiceApp.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
-				return View(model);
+				return View("CreateTest", model);
 			}
 
 			var newUser = await _userService.CreateUser(model);

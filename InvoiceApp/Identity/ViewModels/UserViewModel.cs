@@ -8,6 +8,8 @@ namespace InvoiceApp.Identity.ViewModels
 {
 	public class UserViewModel : IValidatableObject
 	{
+		public string? Id { get; set; }
+
 		[Required(ErrorMessage = "Input the name")]
 		[StringLength(50, MinimumLength = 2, ErrorMessage = "The name must contain more than 2 and less than 50 symbols")]
 		public string Name { get; set; }
@@ -53,6 +55,11 @@ namespace InvoiceApp.Identity.ViewModels
 						}
 					}
 				}
+			}
+
+			if (userManager.FindByEmailAsync(Email).GetAwaiter().GetResult() is not null)
+			{
+				errors.Add(new ValidationResult("This Email is already used", new string[] { "Email" }));
 			}
 
 			if (!UserRoles.GetAll().Contains(Role))
