@@ -1,6 +1,8 @@
-﻿using InvoiceApp.Identity.Services.Interfaces;
+﻿using InvoiceApp.Identity.Constants;
+using InvoiceApp.Identity.Services.Interfaces;
 using InvoiceApp.Identity.ViewModels;
 using InvoiceApp.ViewModels.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvoiceApp.Controllers
@@ -15,10 +17,33 @@ namespace InvoiceApp.Controllers
 		}
 
 
-		public IActionResult Index() => View();
+		[HttpGet]
+		public IActionResult SignIn()
+		{
+			return View(new SignInViewModel());
+		}
+
+
+		[HttpPost]
+		public async Task<IActionResult> SignIn(SignInViewModel model)
+		{
+			var user = await _userService.SignIn(model);
+
+			return RedirectToAction("Index");
+		}
+
 
 
 		[HttpGet]
+		public IActionResult Index()
+		{
+			var user = HttpContext.User;
+			return View();
+		}
+
+
+		[HttpGet]
+		[Authorize]
 		public async Task<IActionResult> Create()
 		{
 			return View(new UserViewModel());
@@ -26,6 +51,7 @@ namespace InvoiceApp.Controllers
 
 
 		[HttpPost]
+		[Authorize]
 		public async Task<IActionResult> Create(UserViewModel model)
 		{
 			if (!ModelState.IsValid)
@@ -40,6 +66,7 @@ namespace InvoiceApp.Controllers
 
 
 		[HttpGet]
+		[Authorize(Roles = $"{UserRoles.Admin}")]
 		public async Task<IActionResult> List()
 		{
 			var users = await _userService.GetAll();
@@ -51,6 +78,7 @@ namespace InvoiceApp.Controllers
 
 
 		[HttpGet]
+		[Authorize(Roles = $"{UserRoles.Admin}")]
 		[Route("{action}/{id:required}")]
 		public async Task<IActionResult> Edit(string id)
 		{
@@ -72,6 +100,7 @@ namespace InvoiceApp.Controllers
 
 
 		[HttpPost]
+		[Authorize(Roles = $"{UserRoles.Admin}")]
 		public async Task<IActionResult> EditPost(UserViewModel model)
 		{
 			if (!ModelState.IsValid)
