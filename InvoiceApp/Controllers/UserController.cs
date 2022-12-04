@@ -1,8 +1,6 @@
-﻿using InvoiceApp.Identity.Constants;
-using InvoiceApp.Identity.Services.Interfaces;
+﻿using InvoiceApp.Identity.Services.Interfaces;
 using InvoiceApp.Identity.ViewModels;
 using InvoiceApp.ViewModels.User;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvoiceApp.Controllers
@@ -33,6 +31,15 @@ namespace InvoiceApp.Controllers
 		}
 
 
+		[HttpGet]
+		public async Task<IActionResult> SignOut()
+		{
+			await _userService.SignOut();
+
+			return RedirectToAction("Index");
+		}
+
+
 
 		[HttpGet]
 		public IActionResult Index()
@@ -43,7 +50,7 @@ namespace InvoiceApp.Controllers
 
 
 		[HttpGet]
-		[Authorize]
+		//[Authorize]
 		public async Task<IActionResult> Create()
 		{
 			return View(new UserViewModel());
@@ -51,7 +58,7 @@ namespace InvoiceApp.Controllers
 
 
 		[HttpPost]
-		[Authorize]
+		//[Authorize]
 		public async Task<IActionResult> Create(UserViewModel model)
 		{
 			if (!ModelState.IsValid)
@@ -66,7 +73,7 @@ namespace InvoiceApp.Controllers
 
 
 		[HttpGet]
-		[Authorize(Roles = $"{UserRoles.Admin}")]
+		//[Authorize(Roles = $"{UserRoles.Admin}")]
 		public async Task<IActionResult> List()
 		{
 			var users = await _userService.GetAll();
@@ -78,7 +85,7 @@ namespace InvoiceApp.Controllers
 
 
 		[HttpGet]
-		[Authorize(Roles = $"{UserRoles.Admin}")]
+		//[Authorize(Roles = $"{UserRoles.Admin}")]
 		[Route("{action}/{id:required}")]
 		public async Task<IActionResult> Edit(string id)
 		{
@@ -100,7 +107,7 @@ namespace InvoiceApp.Controllers
 
 
 		[HttpPost]
-		[Authorize(Roles = $"{UserRoles.Admin}")]
+		//[Authorize(Roles = $"{UserRoles.Admin}")]
 		public async Task<IActionResult> EditPost(UserViewModel model)
 		{
 			if (!ModelState.IsValid)
@@ -109,6 +116,15 @@ namespace InvoiceApp.Controllers
 			}
 
 			var newUser = await _userService.Update(model);
+
+			return RedirectToAction(nameof(List));
+		}
+
+
+		[HttpGet]
+		public async Task<IActionResult> Delete(string id)
+		{
+			var isDeleted = await _userService.Delete(id);
 
 			return RedirectToAction(nameof(List));
 		}

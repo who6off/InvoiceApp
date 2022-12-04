@@ -28,7 +28,7 @@
                 <td>@user.RoleName</td>
                 <td> 
                     <a asp-controller="User" asp-action="Edit" asp-route-id="@user.Id" class="btn btn-warning">Edit</a> 
-                    <a class="btn btn-danger">Delete</a> 
+                    <a asp-controller="User" asp-action="Delete" asp-route-id="@user.Id" class="btn btn-danger">Delete</a> 
                 </td>
              </tr>
         }

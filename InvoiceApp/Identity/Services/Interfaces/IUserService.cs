@@ -8,6 +8,8 @@ namespace InvoiceApp.Identity.Services.Interfaces
 	{
 		public Task<AppUser?> SignIn(SignInViewModel model);
 
+		public Task SignOut();
+
 		public Task<AppUser[]> GetAll();
 
 		public Task<AppUser?> GetById(string id);
@@ -15,5 +17,7 @@ namespace InvoiceApp.Identity.Services.Interfaces
 		public Task<AppUser?> Create(UserViewModel model);
 
 		public Task<AppUser?> Update(UserViewModel model);
+
+		public Task<bool> Delete(string id);
 	}
 }
