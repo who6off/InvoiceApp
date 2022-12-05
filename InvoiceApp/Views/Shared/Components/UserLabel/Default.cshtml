@@ -1,0 +1,15 @@
+﻿@model string?
+
+@if (Model is null)
+{
+	<a asp-controller="User" asp-action="SignIn" asp-route-returnUrl="@Context.Request.Path" class="btn btn-primary">Sign In</a>
+}
+else
+{
+	<div class="gx-1">
+		<span><small>Signed in as</small> <strong>@Model</strong></span>
+		<a asp-controller="User" asp-action="SignOut" class="btn btn-primary">Sign Out</a>
+	</div>
+}
+
+

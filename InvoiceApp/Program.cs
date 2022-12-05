@@ -45,6 +45,7 @@ namespace InvoiceApp
             builder.Services.AddScoped<IUserClaimsPrincipalFactory<AppUser>, AppClaimsFactory>();
             builder.Services.AddScoped<IUserService, UserService>();
 
+            builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

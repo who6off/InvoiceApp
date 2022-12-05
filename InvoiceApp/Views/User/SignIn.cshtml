@@ -9,6 +9,8 @@
     asp-action="SignIn" method="post"
     class="container card d-grid gap-3 p-3"
 >
+    <input type="hidden" name="returnUrl" value="@ViewData["returnUrl"]"/>
+
 	<div class="row form-group gy-1">
         <label asp-for="@Model.Email" class="col-12">Email:</label>
 		<input asp-for="@Model.Email" type="email" value="@Model.Email" class="form-control" />

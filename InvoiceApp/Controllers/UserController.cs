@@ -18,18 +18,21 @@ namespace InvoiceApp.Controllers
 
 
         [HttpGet]
-        public IActionResult SignIn()
+        public IActionResult SignIn(string? returnUrl)
         {
+            ViewData["returnUrl"] = returnUrl;
             return View(new SignInViewModel());
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> SignIn(SignInViewModel model)
+        public async Task<IActionResult> SignIn(SignInViewModel model, string? returnUrl)
         {
             var user = await _userService.SignIn(model);
 
-            return RedirectToAction("Index");
+            return string.IsNullOrEmpty(returnUrl)
+                ? RedirectToAction("Index", "Home")
+                : Redirect(returnUrl);
         }
 
 
@@ -38,7 +41,7 @@ namespace InvoiceApp.Controllers
         {
             await _userService.SignOut();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
 
 
@@ -51,7 +54,7 @@ namespace InvoiceApp.Controllers
 
 
         [HttpGet]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> Create()
         {
             return View(new UserViewModel());
