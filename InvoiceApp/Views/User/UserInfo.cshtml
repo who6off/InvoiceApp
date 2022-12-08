@@ -6,14 +6,11 @@
 @{
 }
 
-<pre>
-	@JsonSerializer.Serialize(Model.AppUser, new JsonSerializerOptions() { WriteIndented = true });
-	
-</pre>
+<h2>@Model.Header</h2>
+
+<pre>@JsonSerializer.Serialize(Model.AppUser, new JsonSerializerOptions() { WriteIndented = true })</pre>
 
 <br />
 <hr />
 
-<pre>
-	@JsonSerializer.Serialize(Model.UserViewModel, new JsonSerializerOptions() { WriteIndented = true });
-</pre>
+<pre>@JsonSerializer.Serialize(Model.UserViewModel, new JsonSerializerOptions() { WriteIndented = true })</pre>

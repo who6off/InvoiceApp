@@ -7,7 +7,9 @@
 else
 {
 	<div class="gx-1">
-		<span><small>Signed in as</small> <strong>@Model</strong></span>
+		<a asp-controller="User" asp-action="Profile" class="text-secondary text-decoration-none">
+			<span><small>Signed in as</small> <strong>@Model</strong></span>
+		</a>
 		<a asp-controller="User" asp-action="SignOut" class="btn btn-primary">Sign Out</a>
 	</div>
 }

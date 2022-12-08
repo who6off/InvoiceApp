@@ -1,0 +1,9 @@
+﻿@using System.Text.Json;
+@model InvoiceApp.ViewModels.User.ProfileViewModel
+
+
+@{
+}
+
+
+<pre>@JsonSerializer.Serialize(Model, new JsonSerializerOptions(){WriteIndented = true})</pre>
