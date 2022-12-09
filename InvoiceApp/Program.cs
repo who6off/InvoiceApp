@@ -80,15 +80,12 @@ namespace InvoiceApp
 				try
 				{
 					await IdentityDbInitializer.Initialize(app.Services);
+					app.Run();
 				}
 				catch (Exception e)
 				{
 					Console.WriteLine(e.Message);
 				}
-			})
-			.ContinueWith(_ =>
-			{
-				app.Run();
 			})
 			.Wait();
 		}
