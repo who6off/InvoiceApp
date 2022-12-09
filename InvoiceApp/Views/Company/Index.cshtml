@@ -1,0 +1,63 @@
+﻿@using InvoiceApp.ViewModels.Company;
+
+@model IndexViewModel; 
+
+@{
+
+}
+
+<h2>Companies</h2>
+
+<div class="container p-0">
+    <div class="row p-0">
+        <div class="card col-6 p-2">
+            <h3>Add new:</h3>
+
+            <form asp-controller="Company"
+                    asp-action="Create"
+                    method="post"
+                    class="row p-2"
+            >
+		        <div class="col-10 p-0">
+                    <input asp-for="@Model.NewCompanyName" type="text" value="@Model.NewCompanyName" placeholder="Company name..." class="form-control" />
+					<span  asp-validation-for="@Model.NewCompanyName" class="text-danger px-1"></span>
+                </div>
+		        <div class="col-2 p-0">
+                    <input type="submit" value="Add" class="w-100 btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Companies is not null)
+        {
+            foreach (var item in Model.Companies)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>
+                        <a asp-controller="" asp-action="Info" asp-route-id="@item.Id" class="btn btn-info">Info</a>
+                        <a asp-controller="" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
+                        <a asp-controller="" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/validation.css" asp-append-version="true" />
+}

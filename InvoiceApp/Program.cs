@@ -1,10 +1,14 @@
 using InvoiceApp.Data;
+using InvoiceApp.Data.Repositories;
+using InvoiceApp.Data.Repositories.Interfaces;
 using InvoiceApp.Helpers;
 using InvoiceApp.Identity.Data;
 using InvoiceApp.Identity.Helpers;
 using InvoiceApp.Identity.Models;
 using InvoiceApp.Identity.Services;
 using InvoiceApp.Identity.Services.Interfaces;
+using InvoiceApp.Services;
+using InvoiceApp.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,6 +53,10 @@ namespace InvoiceApp
 			builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 
 			builder.Services.AddSingleton<DapperContext>();
+
+			builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+
+			builder.Services.AddScoped<ICompanyService, CompanyService>();
 
 			var app = builder.Build();
 

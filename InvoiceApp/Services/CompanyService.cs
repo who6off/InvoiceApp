@@ -19,5 +19,11 @@ namespace InvoiceApp.Services
 		{
 			return _repository.GetAll();
 		}
+
+
+		public Task<bool> Create(string name)
+		{
+			return _repository.Create(new Company() { Name = name });
+		}
 	}
 }

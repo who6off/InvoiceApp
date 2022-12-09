@@ -61,7 +61,6 @@ namespace InvoiceApp.Controllers
 		[Authorize(Roles = $"{UserRoles.Admin}")]
 		public IActionResult Index()
 		{
-			var isAdmin = User.IsInRole(UserRoles.Admin);
 			return View();
 		}
 
