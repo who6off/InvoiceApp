@@ -6,7 +6,8 @@ namespace InvoiceApp.Services.Interfaces
 	{
 		public Task<List<Company>> GetAll();
 
-		public Task<bool> Create(string name);
+		public Task<Company> Create(string name);
 
+		public Task<bool> Delete(int id);
 	}
 }

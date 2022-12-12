@@ -36,7 +36,24 @@ namespace InvoiceApp.Controllers
                 return View("Index", viewModel);
             }
 
-            var isCreated = await _companyServce.Create(viewModel.NewCompanyName);
+            var company = await _companyServce.Create(viewModel.NewCompanyName);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var isDeleted = await _companyServce.Delete(id);
 
             return RedirectToAction(nameof(Index));
         }

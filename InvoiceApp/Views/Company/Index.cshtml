@@ -48,9 +48,9 @@
                     <td>@item.Id</td>
                     <td>@item.Name</td>
                     <td>
-                        <a asp-controller="" asp-action="Info" asp-route-id="@item.Id" class="btn btn-info">Info</a>
-                        <a asp-controller="" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
-                        <a asp-controller="" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                        <a asp-controller="Company" asp-action="Info" asp-route-id="@item.Id" class="btn btn-info">Info</a>
+                        <a asp-controller="Company" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
+                        <a asp-controller="Company" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
                     </td>
                 </tr>
             }

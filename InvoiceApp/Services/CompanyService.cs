@@ -21,9 +21,16 @@ namespace InvoiceApp.Services
 		}
 
 
-		public Task<bool> Create(string name)
+		public Task<Company> Create(string name)
 		{
 			return _repository.Create(new Company() { Name = name });
 		}
+
+
+		public Task<bool> Delete(int id)
+		{
+			return _repository.Delete(id);
+		}
+
 	}
 }

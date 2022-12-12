@@ -6,8 +6,8 @@ namespace InvoiceApp.Data.Repositories.Interfaces
     {
         public Task<List<Company>> GetAll();
 
-        public Task<bool> Create(Company company);
+        public Task<Company> Create(Company company);
 
-
+        public Task<bool> Delete(int id);
     }
 }

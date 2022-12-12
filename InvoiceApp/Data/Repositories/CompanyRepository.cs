@@ -11,29 +11,68 @@ namespace InvoiceApp.Data.Repositories
 
         public async Task<List<Company>> GetAll()
         {
+            using var connection = _context.CreateConnection();
             var query = "SELECT * FROM [Companies] ORDER BY [Id] DESC";
+            IEnumerable<Company> queryResult;
 
-            using (var connection = _context.CreateConnection())
+            try
             {
-                var queryResult = await connection.QueryAsync<Company>(query);
-                return queryResult.ToList();
+                queryResult = await connection.QueryAsync<Company>(query);
             }
+            catch (Exception e)
+            {
+                return new List<Company>();
+            }
+
+            return queryResult.ToList();
         }
 
 
-        public async Task<bool> Create(Company company)
+        public async Task<Company?> Create(Company company)
         {
-            var query = "INSERT INTO [Companies]([Name]) VALUES (@Name)";
+            using var connection = _context.CreateConnection();
+            var query = @"
+                INSERT INTO [Companies]([Name]) VALUES (@Name);
+                SELECT CAST(SCOPE_IDENTITY() as int)
+            ";
+            int newRecordId;
 
-            using (var connection = _context.CreateConnection())
+            try
             {
-                var queryResult = await connection.ExecuteAsync(query, new
+                newRecordId = await connection.QuerySingleAsync<int>(query, new
                 {
                     Name = company.Name,
                 });
-
-                return queryResult != 0;
             }
+            catch (Exception e)
+            {
+                return null;
+            }
+
+            company.Id = newRecordId;
+
+            return company;
+        }
+
+
+        public async Task<bool> Delete(int id)
+        {
+            using var connection = _context.CreateConnection();
+            var query = @"
+                DELETE FROM [Companies] WHERE [Id]=@Id;
+            ";
+            int queryResult;
+
+            try
+            {
+                queryResult = await connection.ExecuteAsync(query, new { Id = id });
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+            return queryResult != 0;
         }
     }
 }
