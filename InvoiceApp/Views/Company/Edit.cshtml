@@ -1,0 +1,34 @@
+﻿@using InvoiceApp.Data.Models;
+
+@model Company
+
+
+<div class="container p-0">
+    <div class="row p-0">
+        <div class="card col-6 p-2">
+            <h3>Edit:</h3>
+
+            <form asp-controller="Company"
+                  asp-action="Edit"
+                  method="post"
+                  class="row p-2"
+            >
+				<input asp-for="@Model.Id" type="hidden" value="@Model.Id" />
+
+                <div class="col-10 p-0">
+                    <input asp-for="@Model.Name" type="text" value="@Model.Name" placeholder="Company name..." class="form-control" />
+                    <span asp-validation-for="@Model.Name" class="text-danger px-1"></span>
+                </div>
+
+                <div class="col-2 p-0">
+                    <input type="submit" value="Save" class="w-100 btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/validation.css" asp-append-version="true" />
+}

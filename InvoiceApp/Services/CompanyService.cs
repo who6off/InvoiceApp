@@ -15,6 +15,12 @@ namespace InvoiceApp.Services
 		}
 
 
+		public Task<Company?> GetById(int id)
+		{
+			return _repository.GetById(id);
+		}
+
+
 		public Task<List<Company>> GetAll()
 		{
 			return _repository.GetAll();
@@ -24,6 +30,12 @@ namespace InvoiceApp.Services
 		public Task<Company> Create(string name)
 		{
 			return _repository.Create(new Company() { Name = name });
+		}
+
+
+		public Task<Company?> Update(Company company)
+		{
+			return _repository.Update(company);
 		}
 
 

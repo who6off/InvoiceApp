@@ -1,4 +1,5 @@
-﻿using InvoiceApp.Services.Interfaces;
+﻿using InvoiceApp.Data.Models;
+using InvoiceApp.Services.Interfaces;
 using InvoiceApp.ViewModels.Company;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,8 +44,24 @@ namespace InvoiceApp.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Update(int id)
+        public async Task<IActionResult> Edit(int id)
         {
+            var company = await _companyServce.GetById(id);
+            if (company is null)
+                return this.NotFound();
+
+            return View(company);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Company company)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(company);
+            }
+
+            var updatedCompany = await _companyServce.Update(company);
 
             return RedirectToAction(nameof(Index));
         }

@@ -9,6 +9,25 @@ namespace InvoiceApp.Data.Repositories
         public CompanyRepository(DapperContext context) : base(context) { }
 
 
+        public async Task<Company?> GetById(int id)
+        {
+            using var connection = _context.CreateConnection();
+            var query = "SELECT * FROM [Companies] WHERE [Id]=@Id";
+            Company? result;
+
+            try
+            {
+                result = await connection.QuerySingleAsync<Company?>(query, new { Id = id });
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+
+            return result;
+        }
+
+
         public async Task<List<Company>> GetAll()
         {
             using var connection = _context.CreateConnection();
@@ -50,6 +69,33 @@ namespace InvoiceApp.Data.Repositories
             }
 
             company.Id = newRecordId;
+
+            return company;
+        }
+
+
+        public async Task<Company?> Update(Company company)
+        {
+            using var connection = _context.CreateConnection();
+            var query = @"
+                UPDATE [Companies]
+                SET [Name]=@Name
+                WHERE [Id]=@Id;
+            ";
+            int queryResult;
+
+            try
+            {
+                queryResult = await connection.ExecuteAsync(query, new
+                {
+                    Id = company.Id,
+                    Name = company.Name
+                });
+            }
+            catch (Exception)
+            {
+                return null;
+            }
 
             return company;
         }
