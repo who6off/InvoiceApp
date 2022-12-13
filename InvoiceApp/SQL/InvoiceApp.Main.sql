@@ -22,15 +22,15 @@ CREATE TABLE [InvoiceActions]
 CREATE TABLE [Invoices]
 (
 	[Id] INT PRIMARY KEY IDENTITY,
-	[Owner] INT REFERENCES [Companies]([Id]) ON DELETE SET NULL,
+	[OwnerId] INT REFERENCES [Companies]([Id]) ON DELETE SET NULL,
 	[Amount] DECIMAL(11,2) NOT NULL,
 	[Month] Date NOT NULL CHECK(DAY([Month])=1),
-	[CrationDate] DATE NOT NULL,
-	[CreatorId] VARCHAR(30),
+	[CrationDate] DATETIME NOT NULL,
+	[CreatorId] VARCHAR(64),
 	[Status] INT REFERENCES [InvoiceStatuses]([Id]) NOT NULL, 
-	[LastUdpdateTime] DATETIME NOT NULL,
+	[LastUdpdateDate] DATETIME NOT NULL,
 	[LastUpdateAction] INT REFERENCES [InvoiceActions]([Id]) NOT NULL,
-	[LastUpdateAuthor] VARCHAR(30) NOT NULL
+	[LastUpdateAuthor] VARCHAR(64) NOT NULL
 );
 
 

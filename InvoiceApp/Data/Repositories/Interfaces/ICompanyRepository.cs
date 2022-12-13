@@ -2,16 +2,18 @@
 
 namespace InvoiceApp.Data.Repositories.Interfaces
 {
-    public interface ICompanyRepository
-    {
-        public Task<Company?> GetById(int id);
+	public interface ICompanyRepository
+	{
+		public Task<Company?> GetById(int id);
 
-        public Task<List<Company>> GetAll();
+		public Task<Company?> GetByName(string name);
 
-        public Task<Company> Create(Company company);
+		public Task<List<Company>> GetAll();
 
-        public Task<Company?> Update(Company company);
+		public Task<Company?> Create(Company company);
 
-        public Task<bool> Delete(int id);
-    }
+		public Task<Company?> Update(Company company);
+
+		public Task<bool> Delete(int id);
+	}
 }

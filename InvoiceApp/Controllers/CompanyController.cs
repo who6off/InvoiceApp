@@ -75,5 +75,19 @@ namespace InvoiceApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> Info(int id)
+        {
+            var company = await _companyServce.GetById(id);
+            if (company is null)
+                return NotFound();
+
+            return View(new CompanyInfoViewModel()
+            {
+                Company = company
+            });
+        }
+
     }
 }

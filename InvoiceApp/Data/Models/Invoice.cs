@@ -6,7 +6,21 @@
 
 		public int? OwnerId { get; set; }
 
-		public Company? Owner { get; set; }
+		private Company? _company;
+		public Company? Owner
+		{
+			get
+			{
+				return _company;
+			}
+			set
+			{
+				if (value is null) return;
+
+				OwnerId = value.Id;
+				_company = value;
+			}
+		}
 
 		public decimal Amount { get; set; }
 
@@ -20,7 +34,7 @@
 
 		public string LastUpdateAction { get; set; }
 
-		public DateTime LastUpdateTime { get; set; }
+		public DateTime LastUpdateDate { get; set; }
 
 		public string? LastUpdateAuthorId { get; set; }
 	}

@@ -55,8 +55,10 @@ namespace InvoiceApp
 			builder.Services.AddSingleton<DapperContext>();
 
 			builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+			builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
 
 			builder.Services.AddScoped<ICompanyService, CompanyService>();
+			builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 
 			var app = builder.Build();
 

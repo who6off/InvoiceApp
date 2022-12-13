@@ -1,11 +1,11 @@
 ﻿.input-validation-error {
-    border-color: red;
+    border-color: var(--bs-danger);
 }
 
     .input-validation-error.form-control:focus {
-        color: #212529;
+        color: var(--bs-dark);
         background-color: #fff;
-        border-color: red;
+        border-color: var(--bs-danger);
         outline: 0;
         box-shadow: 0 0 0 0.25rem red;
     }
