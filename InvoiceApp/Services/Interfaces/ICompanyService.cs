@@ -8,7 +8,7 @@ namespace InvoiceApp.Services.Interfaces
 
         public Task<List<Company>> GetAll();
 
-        public Task<Company> Create(string name);
+        public Task<Company?> Create(string name);
 
         public Task<Company?> Update(Company company);
 

@@ -8,6 +8,8 @@ namespace InvoiceApp.Controllers
 {
 	public class InvoiceController : Controller
 	{
+		private const string NewInvoice = "NewInvoice";
+
 		private readonly IInvoiceService _invoiceService;
 
 		public InvoiceController(IInvoiceService invoiceService)
@@ -44,7 +46,19 @@ namespace InvoiceApp.Controllers
 				return View(model);
 			}
 
-			return RedirectToAction("Index");
+			if (invoice is null)
+				return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+
+			TempData.Put<Invoice>(NewInvoice, invoice);
+			return RedirectToAction(nameof(Details));
+		}
+
+
+		[HttpGet]
+		public async Task<IActionResult> Details()
+		{
+			var invoice = TempData.Get<Invoice>(NewInvoice);
+			return View(invoice);
 		}
 	}
 }

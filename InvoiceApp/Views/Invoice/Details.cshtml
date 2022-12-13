@@ -1,0 +1,10 @@
+﻿@using InvoiceApp.Data.Models;
+@using System.Text.Json;
+
+@model Invoice
+
+@{
+}
+
+
+<pre>@JsonSerializer.Serialize(Model, new JsonSerializerOptions() { WriteIndented = true })</pre>

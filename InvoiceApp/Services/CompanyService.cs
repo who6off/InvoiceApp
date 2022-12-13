@@ -1,5 +1,6 @@
 ﻿using InvoiceApp.Data.Models;
 using InvoiceApp.Data.Repositories.Interfaces;
+using InvoiceApp.Helpers;
 using InvoiceApp.Services.Interfaces;
 
 namespace InvoiceApp.Services
@@ -27,9 +28,13 @@ namespace InvoiceApp.Services
 		}
 
 
-		public Task<Company> Create(string name)
+		public async Task<Company?> Create(string name)
 		{
-			return _repository.Create(new Company() { Name = name });
+			var company = await _repository.Create(new Company() { Name = name });
+			if (company is null)
+				throw new ModelValidationException(nameof(company.Name), "Incorrect name!");
+
+			return company;
 		}
 
 
