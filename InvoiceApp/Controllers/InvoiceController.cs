@@ -35,7 +35,6 @@ namespace InvoiceApp.Controllers
 				return View(model);
 
 			Invoice? invoice;
-
 			try
 			{
 				invoice = await _invoiceService.Create(model);
@@ -61,6 +60,7 @@ namespace InvoiceApp.Controllers
 
 			return View(new InvoiceViewModel()
 			{
+				Id = invoice.Id,
 				Owner = invoice.Owner.Name,
 				Amount = invoice.Amount,
 				Month = invoice.Month,
@@ -69,13 +69,12 @@ namespace InvoiceApp.Controllers
 
 
 		[HttpPost]
-		public async Task<IActionResult> Update(InvoiceViewModel model)
+		public async Task<IActionResult> Edit(InvoiceViewModel model)
 		{
 			if (!ModelState.IsValid)
 				return View(model);
 
 			Invoice? invoice;
-
 			try
 			{
 				invoice = await _invoiceService.Update(model);

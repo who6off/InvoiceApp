@@ -28,9 +28,9 @@ CREATE TABLE [Invoices]
 	[CrationDate] DATETIME NOT NULL,
 	[CreatorId] VARCHAR(64),
 	[Status] INT REFERENCES [InvoiceStatuses]([Id]) NOT NULL, 
-	[LastUdpdateDate] DATETIME NOT NULL,
+	[LastUpdateDate] DATETIME NOT NULL,
 	[LastUpdateAction] INT REFERENCES [InvoiceActions]([Id]) NOT NULL,
-	[LastUpdateAuthor] VARCHAR(64) NOT NULL
+	[LastUpdateAuthorId] VARCHAR(64) NOT NULL
 );
 
 

@@ -26,7 +26,7 @@ namespace InvoiceApp.Services
 
 		public Task<Invoice?> GetById(int id)
 		{
-			return _invoiceRepsotory.GetById(id);
+			return _invoiceRepository.GetById(id);
 		}
 
 
@@ -62,6 +62,7 @@ namespace InvoiceApp.Services
 			var date = DateTime.Now;
 			var invoice = new Invoice()
 			{
+				Id = model.Id.Value,
 				Owner = validationResult.Company,
 				Amount = model.Amount,
 				Month = model.Month,

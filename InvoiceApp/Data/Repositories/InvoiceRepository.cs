@@ -14,12 +14,25 @@ namespace InvoiceApp.Data.Repositories
 		public async Task<Invoice?> GetById(int id)
 		{
 			var connection = CreateConnection();
-			var query = "SELECT * FROM Invoices] WHERE [Id]=@Id";
-			Invoice result;
+			var query = @"
+				SELECT * FROM [Invoices] 
+				JOIN [Companies]
+				ON [Invoices].[OwnerId] = [Companies].[Id]
+				WHERE [Invoices].[Id]=@Id
+			";
+			Invoice? result = null;
 
 			try
 			{
-				result = await connection.QuerySingleAsync<Invoice>(query, new { Id = id })
+				var queryResult = await connection.QueryAsync<Invoice, Company, Invoice>(
+					query,
+					(invoice, company) =>
+					{
+						result = invoice;
+						result.Owner = company;
+						return invoice;
+					},
+					new { Id = id });
 			}
 			catch (Exception e)
 			{
@@ -74,9 +87,9 @@ namespace InvoiceApp.Data.Repositories
 					[Amount]=@Amount,
 					[Month]=@Month,
 					[Status]=(SELECT [Id] FROM [InvoiceStatuses] WHERE [Name]=@Status),
-					[LastUdpdateDate]=@LastUdpdateDate,
-					[LastUpdateAction]=@LastUpdateAction,
-					[LastUpdateAuthor]=@LastUpdateAuthor
+					[LastUpdateDate]=@LastUpdateDate,
+					[LastUpdateAction]=(SELECT [Id] FROM [InvoiceActions] WHERE [Name]=@LastUpdateAction),
+					[LastUpdateAuthorId]=@LastUpdateAuthorId
 				WHERE [Id]=@Id
 			";
 			int queryResult;

@@ -12,9 +12,11 @@
 
 <h2>Create Invoice</h2>
 
-<form asp-controller="Invoice"
-	  asp-action="Edit" method="post"
-	  class="container d-grid gap-3 p-2 card">
+<form 
+	asp-controller="Invoice"
+	asp-action="Edit" method="post"
+	class="container d-grid gap-3 p-2 card"
+>
 	<input asp-for="@Model.Id" type="hidden" value="@Model.Id" />
 
 	<div class="row form-group gy-1">
@@ -49,7 +51,7 @@
 
 	<div class="row form-group gy-1">
 		<div class="col-12 text-end">
-			<input type="submit" value="Create" class="btn btn-primary" />
+			<input type="submit" value="Save" class="btn btn-primary" />
 		</div>
 	</div>
 </form>
