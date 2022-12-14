@@ -4,49 +4,80 @@ using InvoiceApp.Data.Repositories.Interfaces;
 
 namespace InvoiceApp.Data.Repositories
 {
-	public class InvoiceRepository : ARepositiry, IInvoiceRepository
-	{
-		public InvoiceRepository(
-			DapperContext context) : base(context)
-		{ }
+    public class InvoiceRepository : ARepositiry, IInvoiceRepository
+    {
+        public InvoiceRepository(
+            DapperContext context) : base(context)
+        { }
 
 
-		public async Task<Invoice?> GetById(int id)
-		{
-			var connection = CreateConnection();
-			var query = @"
+        public async Task<List<Invoice>> GetAll()
+        {
+            var connection = CreateConnection();
+            var query = @"
+                SELECT * FROM [Invoices] 
+				JOIN [Companies]
+				ON [Invoices].[OwnerId] = [Companies].[Id]
+                ORDER BY [Invoices].[LastUpdateDate] DESC
+            ";
+            var result = new List<Invoice>();
+
+            try
+            {
+                result = (await connection.QueryAsync<Invoice, Company, Invoice>(query,
+                    (invoice, company) =>
+                    {
+                        invoice.Owner = company;
+                        result.Add(invoice);
+                        return invoice;
+                    }))
+                    .ToList();
+            }
+            catch (Exception)
+            {
+                return new List<Invoice>();
+            }
+
+            return result;
+        }
+
+
+        public async Task<Invoice?> GetById(int id)
+        {
+            using var connection = CreateConnection();
+            var query = @"
 				SELECT * FROM [Invoices] 
 				JOIN [Companies]
 				ON [Invoices].[OwnerId] = [Companies].[Id]
 				WHERE [Invoices].[Id]=@Id
 			";
-			Invoice? result = null;
+            Invoice? result = null;
 
-			try
-			{
-				var queryResult = await connection.QueryAsync<Invoice, Company, Invoice>(
-					query,
-					(invoice, company) =>
-					{
-						result = invoice;
-						result.Owner = company;
-						return invoice;
-					},
-					new { Id = id });
-			}
-			catch (Exception e)
-			{
-				return null;
-			}
+            try
+            {
+                var queryResult = await connection.QueryAsync<Invoice, Company, Invoice>(
+                    query,
+                    (invoice, company) =>
+                    {
+                        result = invoice;
+                        result.Owner = company;
+                        return invoice;
+                    },
+                    new { Id = id });
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
 
-			return result;
-		}
+            return result;
+        }
 
 
-		public async Task<Invoice?> Create(Invoice model)
-		{
-			var connection = CreateConnection();
-			var query = @"
+        public async Task<Invoice?> Create(Invoice model)
+        {
+            using var connection = CreateConnection();
+            var query = @"
 				INSERT INTO [Invoices] VALUES
 				(
 					@OwnerId,
@@ -61,27 +92,27 @@ namespace InvoiceApp.Data.Repositories
 				);
 				SELECT CAST(SCOPE_IDENTITY() as int);
 			";
-			int queryResult;
+            int queryResult;
 
-			try
-			{
-				queryResult = await connection.QuerySingleAsync<int>(query, model);
-			}
-			catch (Exception e)
-			{
-				return null;
-			}
+            try
+            {
+                queryResult = await connection.QuerySingleAsync<int>(query, model);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
 
-			model.Id = queryResult;
+            model.Id = queryResult;
 
-			return model;
-		}
+            return model;
+        }
 
 
-		public async Task<Invoice?> Update(Invoice model)
-		{
-			var connection = CreateConnection();
-			var query = @"
+        public async Task<Invoice?> Update(Invoice model)
+        {
+            using var connection = CreateConnection();
+            var query = @"
 				UPDATE [Invoices] SET 
 					[OwnerId]=@OwnerId,
 					[Amount]=@Amount,
@@ -92,18 +123,18 @@ namespace InvoiceApp.Data.Repositories
 					[LastUpdateAuthorId]=@LastUpdateAuthorId
 				WHERE [Id]=@Id
 			";
-			int queryResult;
+            int queryResult;
 
-			try
-			{
-				queryResult = await connection.ExecuteAsync(query, model);
-			}
-			catch (Exception e)
-			{
-				return null;
-			}
+            try
+            {
+                queryResult = await connection.ExecuteAsync(query, model);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
 
-			return (queryResult == 1) ? model : null;
-		}
-	}
+            return (queryResult == 1) ? model : null;
+        }
+    }
 }

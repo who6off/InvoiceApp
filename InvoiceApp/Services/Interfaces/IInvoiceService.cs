@@ -5,6 +5,8 @@ namespace InvoiceApp.Services.Interfaces
 {
 	public interface IInvoiceService
 	{
+		public Task<List<Invoice>> GetAll();
+
 		public Task<Invoice?> GetById(int id);
 
 		public Task<Invoice?> Create(InvoiceViewModel model);

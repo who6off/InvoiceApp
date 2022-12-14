@@ -1,0 +1,35 @@
+﻿@using InvoiceApp.ViewModels.Invoice;
+@model ListViewModel
+
+@{
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Owner</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Month</th>
+            <th scope="col">Last Change</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Invoices)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Owner?.Name</td>
+                <td>@item.Amount</td>
+                <td>@item.Month.ToString("MMM yyyy")</td>
+                <td>@item.LastUpdateDate.ToString("dd-MM-yy hh:mm")</td>
+                <td>
+                    <a asp-controller="Invoice" asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Detais</a>
+                    <a asp-controller="Invoice" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
+                    <a asp-controller="Invoice" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

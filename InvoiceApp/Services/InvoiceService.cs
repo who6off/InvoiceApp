@@ -24,6 +24,12 @@ namespace InvoiceApp.Services
 		}
 
 
+		public Task<List<Invoice>> GetAll()
+		{
+			return _invoiceRepository.GetAll();
+		}
+
+
 		public Task<Invoice?> GetById(int id)
 		{
 			return _invoiceRepository.GetById(id);
@@ -54,7 +60,7 @@ namespace InvoiceApp.Services
 			return newInvoice;
 		}
 
-		public async Task<Invoice> Update(InvoiceViewModel model)
+		public async Task<Invoice?> Update(InvoiceViewModel model)
 		{
 			var validationResult = await ValidateInvoiceViewModel(model);
 			var userId = _httpContext?.User.GetId();
