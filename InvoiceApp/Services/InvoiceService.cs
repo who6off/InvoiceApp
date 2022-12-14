@@ -24,20 +24,21 @@ namespace InvoiceApp.Services
 		}
 
 
+		public Task<Invoice?> GetById(int id)
+		{
+			return _invoiceRepsotory.GetById(id);
+		}
+
+
 		public async Task<Invoice?> Create(InvoiceViewModel model)
 		{
-			var company = await _companyRepository.GetByName(model.Owner);
-			if (company is null)
-				throw new ModelValidationException(nameof(model.Owner), "There is no such a company in the database!");
-
+			var validationResult = await ValidateInvoiceViewModel(model);
 			var userId = _httpContext?.User.GetId();
-			if (string.IsNullOrEmpty(userId))
-				return null;
 
 			var date = DateTime.Now;
 			var invoice = new Invoice()
 			{
-				Owner = company,
+				Owner = validationResult.Company,
 				Amount = model.Amount,
 				Month = model.Month,
 				Status = InvoiceStatuses.Submitted,
@@ -51,6 +52,46 @@ namespace InvoiceApp.Services
 			var newInvoice = await _invoiceRepository.Create(invoice);
 
 			return newInvoice;
+		}
+
+		public async Task<Invoice> Update(InvoiceViewModel model)
+		{
+			var validationResult = await ValidateInvoiceViewModel(model);
+			var userId = _httpContext?.User.GetId();
+
+			var date = DateTime.Now;
+			var invoice = new Invoice()
+			{
+				Owner = validationResult.Company,
+				Amount = model.Amount,
+				Month = model.Month,
+				Status = InvoiceStatuses.Submitted,
+				LastUpdateAuthorId = userId,
+				LastUpdateAction = InvoiceActions.Update,
+				LastUpdateDate = date,
+			};
+
+			var updatedInvoice = await _invoiceRepository.Update(invoice);
+
+			return updatedInvoice;
+		}
+
+
+		private async Task<InvoiceViewModelValidationResult> ValidateInvoiceViewModel(InvoiceViewModel model)
+		{
+			var company = await _companyRepository.GetByName(model.Owner);
+			if (company is null)
+				throw new ModelValidationException(nameof(model.Owner), "There is no such a company in the database!");
+
+			return new InvoiceViewModelValidationResult()
+			{
+				Company = company
+			};
+		}
+
+		private class InvoiceViewModelValidationResult
+		{
+			public Company? Company { get; set; }
 		}
 	}
 }

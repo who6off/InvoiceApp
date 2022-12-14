@@ -55,6 +55,46 @@ namespace InvoiceApp.Controllers
 
 
 		[HttpGet]
+		public async Task<IActionResult> Edit(int id)
+		{
+			var invoice = await _invoiceService.GetById(id);
+
+			return View(new InvoiceViewModel()
+			{
+				Owner = invoice.Owner.Name,
+				Amount = invoice.Amount,
+				Month = invoice.Month,
+			});
+		}
+
+
+		[HttpPost]
+		public async Task<IActionResult> Update(InvoiceViewModel model)
+		{
+			if (!ModelState.IsValid)
+				return View(model);
+
+			Invoice? invoice;
+
+			try
+			{
+				invoice = await _invoiceService.Update(model);
+			}
+			catch (ModelValidationException e)
+			{
+				ModelState.AddModelError(e.Propery, e.Message);
+				return View(model);
+			}
+
+			if (invoice is null)
+				return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+
+			TempData.Put<Invoice>(NewInvoice, invoice);
+			return RedirectToAction(nameof(Details));
+		}
+
+
+		[HttpGet]
 		public async Task<IActionResult> Details()
 		{
 			var invoice = TempData.Get<Invoice>(NewInvoice);
