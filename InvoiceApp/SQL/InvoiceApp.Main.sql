@@ -25,7 +25,7 @@ CREATE TABLE [Invoices]
 	[OwnerId] INT REFERENCES [Companies]([Id]) ON DELETE SET NULL,
 	[Amount] DECIMAL(11,2) NOT NULL,
 	[Month] Date NOT NULL CHECK(DAY([Month])=1),
-	[CrationDate] DATETIME NOT NULL,
+	[CreationDate] DATETIME NOT NULL,
 	[CreatorId] VARCHAR(64),
 	[Status] INT REFERENCES [InvoiceStatuses]([Id]) NOT NULL, 
 	[LastUpdateDate] DATETIME NOT NULL,

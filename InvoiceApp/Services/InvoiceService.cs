@@ -84,6 +84,12 @@ namespace InvoiceApp.Services
 		}
 
 
+		public Task<bool> Delete(int id)
+		{
+			return _invoiceRepository.Delete(id);
+		}
+
+
 		private async Task<InvoiceViewModelValidationResult> ValidateInvoiceViewModel(InvoiceViewModel model)
 		{
 			var company = await _companyRepository.GetByName(model.Owner);

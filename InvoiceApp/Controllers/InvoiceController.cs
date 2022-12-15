@@ -57,11 +57,9 @@ namespace InvoiceApp.Controllers
                 return View(model);
             }
 
-            if (invoice is null)
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-
-            TempData.Put<Invoice>(NewInvoice, invoice);
-            return RedirectToAction(nameof(Details));
+            return (invoice is null)
+                ? new StatusCodeResult(StatusCodes.Status500InternalServerError)
+                : RedirectToAction(nameof(Details), new { id = invoice.Id });
         }
 
 
@@ -97,18 +95,27 @@ namespace InvoiceApp.Controllers
                 return View(model);
             }
 
-            if (invoice is null)
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-
-            TempData.Put<Invoice>(NewInvoice, invoice);
-            return RedirectToAction(nameof(Details));
+            return (invoice is null)
+                ? new StatusCodeResult(StatusCodes.Status500InternalServerError)
+                : RedirectToAction(nameof(Details), new { id = invoice.Id });
         }
 
 
         [HttpGet]
-        public async Task<IActionResult> Details()
+        public async Task<IActionResult> Delete(int id)
         {
-            var invoice = TempData.Get<Invoice>(NewInvoice);
+            var isDeleted = await _invoiceService.Delete(id);
+
+            return isDeleted
+                ? RedirectToAction(nameof(List))
+                : new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var invoice = await _invoiceService.GetById(id);
             return View(invoice);
         }
     }

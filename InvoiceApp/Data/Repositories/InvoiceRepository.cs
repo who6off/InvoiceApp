@@ -136,5 +136,26 @@ namespace InvoiceApp.Data.Repositories
 
             return (queryResult == 1) ? model : null;
         }
+
+
+        public async Task<bool> Delete(int id)
+        {
+            using var connection = CreateConnection();
+            var query = @"
+                DELETE FROM [Invoices] WHERE [Id]=@id
+            ";
+            int queryResult = 0;
+
+            try
+            {
+                queryResult = await connection.ExecuteAsync(query, new { Id = id });
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+            return queryResult == 1;
+        }
     }
 }

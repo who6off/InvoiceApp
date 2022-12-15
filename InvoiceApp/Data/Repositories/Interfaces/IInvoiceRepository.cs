@@ -11,5 +11,7 @@ namespace InvoiceApp.Data.Repositories.Interfaces
         public Task<Invoice?> Create(Invoice model);
 
         public Task<Invoice?> Update(Invoice model);
+
+        public Task<bool> Delete(int id);
     }
 }
