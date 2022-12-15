@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using InvoiceApp.Data.DbViews;
 using InvoiceApp.Data.Models;
 using InvoiceApp.Data.Repositories.Interfaces;
 
@@ -15,22 +16,15 @@ namespace InvoiceApp.Data.Repositories
         {
             var connection = CreateConnection();
             var query = @"
-                SELECT * FROM [Invoices] 
-				JOIN [Companies]
-				ON [Invoices].[OwnerId] = [Companies].[Id]
-                ORDER BY [Invoices].[LastUpdateDate] DESC
+                SELECT * FROM [InvoicesView]
+                ORDER BY [InvoicesView].[LastUpdateDate] DESC
             ";
             var result = new List<Invoice>();
 
             try
             {
-                result = (await connection.QueryAsync<Invoice, Company, Invoice>(query,
-                    (invoice, company) =>
-                    {
-                        invoice.Owner = company;
-                        result.Add(invoice);
-                        return invoice;
-                    }))
+                result = (await connection.QueryAsync<InvoiceDbView>(query))
+                    .Select(i => new Invoice(i))
                     .ToList();
             }
             catch (Exception)
@@ -46,31 +40,21 @@ namespace InvoiceApp.Data.Repositories
         {
             using var connection = CreateConnection();
             var query = @"
-				SELECT * FROM [Invoices] 
-				JOIN [Companies]
-				ON [Invoices].[OwnerId] = [Companies].[Id]
-				WHERE [Invoices].[Id]=@Id
+				SELECT * FROM [InvoicesView] 
+				WHERE [InvoicesView].[Id]=@Id
 			";
-            Invoice? result = null;
+            InvoiceDbView queryResult = null;
 
             try
             {
-                var queryResult = await connection.QueryAsync<Invoice, Company, Invoice>(
-                    query,
-                    (invoice, company) =>
-                    {
-                        result = invoice;
-                        result.Owner = company;
-                        return invoice;
-                    },
-                    new { Id = id });
+                queryResult = await connection.QuerySingleAsync<InvoiceDbView>(query, new { Id = id });
             }
             catch (Exception e)
             {
                 return null;
             }
 
-            return result;
+            return (queryResult is null) ? null : new Invoice(queryResult);
         }
 
 
@@ -157,5 +141,8 @@ namespace InvoiceApp.Data.Repositories
 
             return queryResult == 1;
         }
+
+
+
     }
 }

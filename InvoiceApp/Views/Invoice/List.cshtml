@@ -1,4 +1,7 @@
-﻿@using InvoiceApp.ViewModels.Invoice;
+﻿@using InvoiceApp.Data.Models;
+@using InvoiceApp.Helpers;
+@using InvoiceApp.ViewModels.Invoice;
+@using System.Globalization;
 @model ListViewModel
 
 @{
@@ -9,22 +12,32 @@
     <thead>
         <tr>
             <th scope="col" style="width:10%">Id</th>
-            <th scope="col" style="width:20%">Owner</th>
-            <th scope="col" style="width:20%">Amount</th>
+            <th scope="col" style="width:17%">Owner</th>
+            <th scope="col" style="width:17%">Amount</th>
             <th scope="col" style="width:15%">Month</th>
-            <th scope="col" style="width:20%">Last Change</th>
+            <th scope="col" style="width:10%">Status</th>
+            <th scope="col" style="width:16%">Last Change</th>
             <th scope="col" style="width:15%"></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model.Invoices)
         {
+            var statusClass = item.Status switch
+            {
+                    InvoiceStatuses.Rejected => "text-danger",
+                    InvoiceStatuses.Approved => "text-success",
+                    InvoiceStatuses.Submitted => "text-primary",
+                    _ => ""
+            };
+
             <tr>
                 <td>@item.Id</td>
                 <td>@item.Owner?.Name</td>
-                <td>@item.Amount</td>
-                <td>@item.Month.ToString("MMM yyyy")</td>
-                <td>@item.LastUpdateDate.ToString(@"hh:mm MM/dd/yyyy")</td>
+                <td>@item.Amount.ToSeparationString()</td>
+                <td>@item.Month.ToMonthString()</td>
+                <td class="@statusClass">@item.Status</td>
+                <td>@item.LastUpdateDate.ToDateWithTimeString()</td>
                 <td>
                         <a asp-controller="Invoice" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detais</a>
                         <a asp-controller="Invoice" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>

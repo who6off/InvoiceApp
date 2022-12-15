@@ -1,4 +1,6 @@
-﻿namespace InvoiceApp.Data.Models
+﻿using InvoiceApp.Data.DbViews;
+
+namespace InvoiceApp.Data.Models
 {
 	public class Invoice
 	{
@@ -37,6 +39,22 @@
 		public DateTime LastUpdateDate { get; set; }
 
 		public string? LastUpdateAuthorId { get; set; }
+
+		public Invoice() { }
+
+		public Invoice(InvoiceDbView viewObj)
+		{
+			Id = viewObj.Id;
+			Owner = new Company() { Id = viewObj.OwnerId, Name = viewObj.OwnerName };
+			Amount = viewObj.Amount;
+			Month = viewObj.Month;
+			CreatorId = viewObj.CreatorId;
+			CreationDate = viewObj.CreationDate;
+			Status = viewObj.Status;
+			LastUpdateAction = viewObj.LastUpdateAction;
+			LastUpdateDate = viewObj.LastUpdateDate;
+			LastUpdateAuthorId = viewObj.LastUpdateAuthorId;
+		}
 	}
 
 

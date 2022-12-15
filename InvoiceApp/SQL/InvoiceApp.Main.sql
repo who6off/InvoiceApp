@@ -34,6 +34,22 @@ CREATE TABLE [Invoices]
 );
 
 
+--CREATE VIEW [InvoiceView] AS 
+--SELECT 
+--	[Id], 
+--	[OwnerId],
+--	(SELECT [Name] FROM [Companies] WHERE [Id]=[Invoices].[OwnerId]) AS [OwnerName],
+--	[Amount],
+--	[Month],
+--	[CreationDate],
+--	[CreatorId],
+--	(SELECT [Name] FROM [InvoiceStatuses] WHERE [Id]=[Invoices].[Status]) AS [Status],
+--	[LastUpdateDate],
+--	(SELECT [Name] FROM [InvoiceActions] WHERE [Id]=[Invoices].[LastUpdateAction]) AS [LastUpdateAction],
+--	[LastUpdateAuthorId]
+--FROM [Invoices];
+
+
 INSERT INTO [InvoiceStatuses]([Name]) VALUES ('Submitted'), ('Approved'), ('Rejected');
 
 INSERT INTO [InvoiceActions]([Name]) VALUES ('Creation'), ('Update'), ('Approval'), ('Rejection');

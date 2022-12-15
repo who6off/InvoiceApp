@@ -31,30 +31,32 @@
 </div>
 
 
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Name</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.Companies is not null)
-        {
-            foreach (var item in Model.Companies)
+<div class="table-wrapper">
+    <table class="table fs-6">
+        <thead>
+            <tr>
+                <th scope="col" style="width:10%">Id</th>
+                <th scope="col" style="width:75%">Name</th>
+                <th scope="col" style="width:15%"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Companies is not null)
             {
-                <tr>
-                    <td>@item.Id</td>
-                    <td>@item.Name</td>
-                    <td>
-                        <a asp-controller="Company" asp-action="Info" asp-route-id="@item.Id" class="btn btn-info">Info</a>
-                        <a asp-controller="Company" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
-                        <a asp-controller="Company" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
-                    </td>
-                </tr>
+                foreach (var item in Model.Companies)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Name</td>
+                        <td>
+                            <a asp-controller="Company" asp-action="Info" asp-route-id="@item.Id" class="btn btn-sm btn-info">Info</a>
+                            <a asp-controller="Company" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
+                            <a asp-controller="Company" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
             }
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
 
