@@ -1,10 +1,46 @@
 ﻿@using InvoiceApp.Data.Models;
 @using System.Text.Json;
+@using InvoiceApp.Identity.Constants;
+@using InvoiceApp.Identity.Helpers;
 
 @model Invoice
 
 @{
+	var isAccountant = User.GetRole() == UserRoles.Accountant;
 }
 
 
 <pre>@JsonSerializer.Serialize(Model, new JsonSerializerOptions() { WriteIndented = true })</pre>
+
+@if(!isAccountant)
+{
+	<div class="container">
+		@if(Model.Status != InvoiceStatuses.Approved)
+		{
+			<form
+				asp-controller="Invoice"
+				asp-action="ChangeStatus"
+				method="post"
+				class="d-inline-block"
+			>
+				<input type="hidden" name="id" value="@Model.Id" />
+				<input type="hidden" name="status" value="@InvoiceStatuses.Approved" />
+				<input type="submit" value="Approve" class="btn btn-success" />
+			</form>
+		}
+
+		@if (Model.Status != InvoiceStatuses.Rejected)
+		{
+			<form 
+				asp-controller="Invoice"
+				asp-action="ChangeStatus"
+				method="post"
+				class="d-inline-block"
+			>
+				<input type="hidden" name="id" value="@Model.Id" />
+				<input type="hidden" name="status" value="@InvoiceStatuses.Rejected" />
+				<input type="submit" value="Reject" class="btn btn-danger" />
+			</form>
+		}
+	</div>
+}

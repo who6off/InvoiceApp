@@ -96,17 +96,17 @@ namespace InvoiceApp.Data.Repositories
         public async Task<Invoice?> Update(Invoice model)
         {
             using var connection = CreateConnection();
-            var query = @"
+            var query = $@"
 				UPDATE [Invoices] SET 
-					[OwnerId]=@OwnerId,
-					[Amount]=@Amount,
-					[Month]=@Month,
-					[Status]=(SELECT [Id] FROM [InvoiceStatuses] WHERE [Name]=@Status),
-					[LastUpdateDate]=@LastUpdateDate,
-					[LastUpdateAction]=(SELECT [Id] FROM [InvoiceActions] WHERE [Name]=@LastUpdateAction),
-					[LastUpdateAuthorId]=@LastUpdateAuthorId
-				WHERE [Id]=@Id
-			";
+					{((model.OwnerId == default(int)) ? "" : "[OwnerId] = @OwnerId,")}
+                    {((model.Amount == default(decimal)) ? "" : "[Amount] = @Amount,")}
+                    {((model.Month == default(DateTime)) ? "" : "[Month]= @Month,")}
+					[Status]= (SELECT[Id] FROM[InvoiceStatuses] WHERE[Name] = @Status),
+					[LastUpdateDate]= @LastUpdateDate,
+					[LastUpdateAction]= (SELECT[Id] FROM[InvoiceActions] WHERE[Name] = @LastUpdateAction),
+					[LastUpdateAuthorId]= @LastUpdateAuthorId
+                WHERE[Id] = @Id
+            ";
             int queryResult;
 
             try

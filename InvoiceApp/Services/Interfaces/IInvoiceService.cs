@@ -14,5 +14,8 @@ namespace InvoiceApp.Services.Interfaces
 		public Task<Invoice?> Update(InvoiceViewModel model);
 
 		public Task<bool> Delete(int id);
+
+		public Task<Invoice?> ChangeStatus(int id, string status);
+
 	}
 }

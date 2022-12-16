@@ -118,5 +118,13 @@ namespace InvoiceApp.Controllers
             var invoice = await _invoiceService.GetById(id);
             return View(invoice);
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeStatus(int id, string status)
+        {
+            var invoice = await _invoiceService.ChangeStatus(id, status);
+            return RedirectToAction(nameof(Details), new { id = id });
+        }
     }
 }
