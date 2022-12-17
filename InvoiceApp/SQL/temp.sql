@@ -14,3 +14,19 @@ INSERT INTO [Invoices] VALUES
 --INSERT INTO [Companies]([Name]) VALUES ('BMW');
 --SELECT * FROM [Companies] WHERE [Id]= SCOPE_IDENTITY();
 
+
+--SELECT 
+--	[Month],
+--	[OwnerName],
+--	SUM([Amount]) AS [Sum]
+--FROM [InvoicesView]
+--WHERE [OwnerId]=1
+--GROUP BY [Month], [OwnerName]
+
+
+SELECT 
+	[Month],
+	SUM([Amount]) AS [Sum]
+FROM [InvoicesView]
+WHERE YEAR([Month])=2022
+GROUP BY [Month]
