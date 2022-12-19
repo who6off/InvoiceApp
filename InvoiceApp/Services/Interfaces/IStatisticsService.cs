@@ -1,11 +1,12 @@
-﻿using InvoiceApp.Data.Models;
+﻿using InvoiceApp.Types.Statistics;
+using InvoiceApp.ViewModels.Statistics;
 
 namespace InvoiceApp.Services.Interfaces
 {
-	public interface IStatisticsService
-	{
-		public Task<List<MonthStatistic>> GetOverallYearStatistics(int year);
-	}
+    public interface IStatisticsService
+    {
+        public Task<RevenueYearStatistic[]> GetYearRevenueStatistic(StatisticRequestViewModel model);
+    }
 
 
 }

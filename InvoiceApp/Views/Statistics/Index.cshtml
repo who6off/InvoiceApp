@@ -1,50 +1,47 @@
 ﻿@using InvoiceApp.Data.Models;
 @using InvoiceApp.Helpers;
 @using System.Text.Json;
+@using InvoiceApp.Types.Statistics;
 
-@model List<MonthStatistic>
+@model RevenueYearStatistic[]
 
 @{
-    //var data = Model.Select(i => new { Amount = i.Amount, Month = Constants.Months[i.Month.Month-1] });
-    var data = Constants.Months.Select((item, index) =>
-    {
-        var monthData = Model.FirstOrDefault(i => (i.Month.Month - 1) == index);
-        var amount = (monthData is null) ? 0 : monthData.Amount;
-        return new { Month = item, Amount = amount };
-    });
+
 }
 
 <h2>Statistics</h2>
 
-<pre>@JsonSerializer.Serialize(data, new JsonSerializerOptions(){WriteIndented = true})</pre>
+<pre>@JsonSerializer.Serialize(Model, new JsonSerializerOptions(){WriteIndented = true})</pre>
 
 <div class="container">
   <canvas id="chart"></canvas>
 </div  >
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  const ctx = document.getElementById('chart');
-  const data = @Json.Serialize(data);
 
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: data.map(i=>i.month),
-      datasets: [{
-        data: data.map(i=>i.amount),
-        borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
+@*@section Scripts{
+    <script>
+      const ctx = document.getElementById('chart');
+      const data = @Json.Serialize(data);
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: data.map(i=>i.month),
+          datasets: [{
+            data: data.map(i=>i.amount),
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
         }
-      }
-    }
-  });
-</script>
+      });
+    </script>
+}*@
 
 
 

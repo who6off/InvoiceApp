@@ -30,3 +30,18 @@ SELECT
 FROM [InvoicesView]
 WHERE YEAR([Month])=2022
 GROUP BY [Month]
+
+
+SELECT 
+	2022 AS [Year],
+	DATENAME(MONTH, [Month]),
+	[OwnerName],
+	SUM([Amount]) AS [Amount]
+FROM 
+	[InvoicesView]
+WHERE 
+	YEAR([Month])=2022 AND
+	[OwnerName] IN ('Nestle', 'Skynet')
+GROUP BY 
+	[Month],
+	[OwnerName]

@@ -1,4 +1,4 @@
-﻿using InvoiceApp.Models;
+﻿using InvoiceApp.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
