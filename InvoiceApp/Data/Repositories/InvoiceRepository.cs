@@ -203,11 +203,4 @@ namespace InvoiceApp.Data.Repositories
             return result;
         }
     }
-
-    public class A
-    {
-        public DateTime Month { get; set; }
-
-        public decimal Summa { get; set; }
-    }
 }
