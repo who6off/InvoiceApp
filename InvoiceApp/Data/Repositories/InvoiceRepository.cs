@@ -5,63 +5,63 @@ using InvoiceApp.Data.Repositories.Interfaces;
 
 namespace InvoiceApp.Data.Repositories
 {
-    public class InvoiceRepository : ARepositiry, IInvoiceRepository
-    {
-        public InvoiceRepository(
-            DapperContext context) : base(context)
-        { }
+	public class InvoiceRepository : ARepositiry, IInvoiceRepository
+	{
+		public InvoiceRepository(
+			DapperContext context) : base(context)
+		{ }
 
 
-        public async Task<List<Invoice>> GetAll()
-        {
-            var connection = CreateConnection();
-            var query = @"
+		public async Task<List<Invoice>> GetAll()
+		{
+			var connection = CreateConnection();
+			var query = @"
                 SELECT * FROM [InvoicesView]
                 ORDER BY [InvoicesView].[LastUpdateDate] DESC
             ";
-            var result = new List<Invoice>();
+			var result = new List<Invoice>();
 
-            try
-            {
-                result = (await connection.QueryAsync<InvoiceDbView>(query))
-                    .Select(i => new Invoice(i))
-                    .ToList();
-            }
-            catch (Exception)
-            {
-                return new List<Invoice>();
-            }
+			try
+			{
+				result = (await connection.QueryAsync<InvoiceDbView>(query))
+					.Select(i => new Invoice(i))
+					.ToList();
+			}
+			catch (Exception e)
+			{
+				return new List<Invoice>();
+			}
 
-            return result;
-        }
+			return result;
+		}
 
 
-        public async Task<Invoice?> GetById(int id)
-        {
-            using var connection = CreateConnection();
-            var query = @"
+		public async Task<Invoice?> GetById(int id)
+		{
+			using var connection = CreateConnection();
+			var query = @"
 				SELECT * FROM [InvoicesView] 
 				WHERE [InvoicesView].[Id]=@Id
 			";
-            InvoiceDbView queryResult = null;
+			InvoiceDbView queryResult = null;
 
-            try
-            {
-                queryResult = await connection.QuerySingleAsync<InvoiceDbView>(query, new { Id = id });
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
+			try
+			{
+				queryResult = await connection.QuerySingleAsync<InvoiceDbView>(query, new { Id = id });
+			}
+			catch (Exception e)
+			{
+				return null;
+			}
 
-            return (queryResult is null) ? null : new Invoice(queryResult);
-        }
+			return (queryResult is null) ? null : new Invoice(queryResult);
+		}
 
 
-        public async Task<Invoice?> Create(Invoice model)
-        {
-            using var connection = CreateConnection();
-            var query = @"
+		public async Task<Invoice?> Create(Invoice model)
+		{
+			using var connection = CreateConnection();
+			var query = @"
 				INSERT INTO [Invoices] VALUES
 				(
 					@OwnerId,
@@ -76,27 +76,27 @@ namespace InvoiceApp.Data.Repositories
 				);
 				SELECT CAST(SCOPE_IDENTITY() as int);
 			";
-            int queryResult;
+			int queryResult;
 
-            try
-            {
-                queryResult = await connection.QuerySingleAsync<int>(query, model);
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
+			try
+			{
+				queryResult = await connection.QuerySingleAsync<int>(query, model);
+			}
+			catch (Exception e)
+			{
+				return null;
+			}
 
-            model.Id = queryResult;
+			model.Id = queryResult;
 
-            return model;
-        }
+			return model;
+		}
 
 
-        public async Task<Invoice?> Update(Invoice model)
-        {
-            using var connection = CreateConnection();
-            var query = $@"
+		public async Task<Invoice?> Update(Invoice model)
+		{
+			using var connection = CreateConnection();
+			var query = $@"
 				UPDATE [Invoices] SET 
 					{((model.OwnerId == default(int)) ? "" : "[OwnerId] = @OwnerId,")}
                     {((model.Amount == default(decimal)) ? "" : "[Amount] = @Amount,")}
@@ -107,47 +107,47 @@ namespace InvoiceApp.Data.Repositories
 					[LastUpdateAuthorId]= @LastUpdateAuthorId
                 WHERE[Id] = @Id
             ";
-            int queryResult;
+			int queryResult;
 
-            try
-            {
-                queryResult = await connection.ExecuteAsync(query, model);
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
+			try
+			{
+				queryResult = await connection.ExecuteAsync(query, model);
+			}
+			catch (Exception e)
+			{
+				return null;
+			}
 
-            return (queryResult == 1) ? model : null;
-        }
+			return (queryResult == 1) ? model : null;
+		}
 
 
-        public async Task<bool> Delete(int id)
-        {
-            using var connection = CreateConnection();
-            var query = @"
+		public async Task<bool> Delete(int id)
+		{
+			using var connection = CreateConnection();
+			var query = @"
                 DELETE FROM [Invoices] WHERE [Id]=@id
             ";
-            int queryResult = 0;
+			int queryResult = 0;
 
-            try
-            {
-                queryResult = await connection.ExecuteAsync(query, new { Id = id });
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
+			try
+			{
+				queryResult = await connection.ExecuteAsync(query, new { Id = id });
+			}
+			catch (Exception e)
+			{
+				return false;
+			}
 
-            return queryResult == 1;
-        }
+			return queryResult == 1;
+		}
 
 
-        public async Task<List<MonthStatistic>> GetYearRevenueStatistic(int year, string[] companies = null)
-        {
-            using var connection = CreateConnection();
-            var isCompaniesRequested = (companies is not null) && (companies.Length > 0);
-            var query = $@"
+		public async Task<List<MonthStatistics>> GetYearRevenueStatistics(int year, string[] companies = null)
+		{
+			using var connection = CreateConnection();
+			var isCompaniesRequested = (companies is not null) && (companies.Length > 0);
+			var query = $@"
                 SELECT 
 	                [I].[Month],
                     {((isCompaniesRequested) ? "[C].[Id], [C].[Name]," : "")}
@@ -165,42 +165,38 @@ namespace InvoiceApp.Data.Repositories
 	                [I].[Month]
                     {((isCompaniesRequested) ? ", [C].[Id], [C].[Name]" : "")}
             ";
-            List<MonthStatistic> result;
+			List<MonthStatistics> result;
 
-            try
-            {
-                if (isCompaniesRequested)
-                {
-                    var queryResult = await connection.QueryAsync<(DateTime Month, int Id, string Name, decimal Amount)>(
-                        query, new { Year = year, Companies = companies });
-                    result = queryResult
-                        .Select(i => new MonthStatistic()
-                        {
-                            Month = i.Month,
-                            Amount = i.Amount,
-                            Company = new Company() { Id = i.Id, Name = i.Name }
-                        })
-                        .ToList();
-                }
-                else
-                {
-                    var queryResult = await connection.QueryAsync<(DateTime Month, decimal Amount)>(
-                       query, new { Year = year });
-                    result = queryResult
-                        .Select(i => new MonthStatistic()
-                        {
-                            Month = i.Month,
-                            Amount = i.Amount
-                        })
-                        .ToList();
-                }
-            }
-            catch (Exception e)
-            {
-                return new List<MonthStatistic>();
-            }
+			try
+			{
+				if (isCompaniesRequested)
+				{
+					var queryResult = await connection.QueryAsync<(DateTime Month, int Id, string Name, decimal Amount)>(
+						query, new { Year = year, Companies = companies });
+					result = queryResult
+						.Select(i => new MonthStatistics()
+						{
+							Month = i.Month,
+							Amount = i.Amount,
+							Company = new Company() { Id = i.Id, Name = i.Name }
+						})
+						.ToList();
+				}
+				else
+				{
+					result = (await connection.QueryAsync<MonthStatistics>(
+						  query,
+						  new { Year = year })
+						)
+						.ToList() ?? new List<MonthStatistics>();
+				}
+			}
+			catch (Exception e)
+			{
+				return new List<MonthStatistics>();
+			}
 
-            return result;
-        }
-    }
+			return result;
+		}
+	}
 }

@@ -1,47 +1,81 @@
 ﻿@using InvoiceApp.Data.Models;
 @using InvoiceApp.Helpers;
 @using System.Text.Json;
+@using InvoiceApp.Services.Interfaces;
 @using InvoiceApp.Types.Statistics;
+@using InvoiceApp.ViewModels.Statistics;
 
-@model RevenueYearStatistic[]
+@inject ICompanyService _companyService;
+
+@model IndexViewModel
 
 @{
-
+	var companies = await _companyService.GetAll();
 }
 
 <h2>Statistics</h2>
 
-<pre>@JsonSerializer.Serialize(Model, new JsonSerializerOptions(){WriteIndented = true})</pre>
+<form 
+	asp-controller="Statistics"
+	asp-action="Index" 
+	method="post"
+	id="statistics-form"
+	class="container d-grid gap-3 p-2 card"
+>
+	<div class="row form-group gy-1">
+		<div class="col-2">
+			<label>Year: </label>
+		</div>
+		<div class="col-10">
+			<input asp-for="@Model.StatisticsRequest.Year" type="number" 
+				value="@Model.StatisticsRequest.Year" min="2000" max="2100"
+				class="form-control" 
+			/>
+		</div>
+	</div>
+
+	<div class="row form-group gy-1">
+		<div class="col-2">
+			<label>Companies: </label>
+		</div>
+		<div class="col-10">
+			<select 
+				asp-for="@Model.StatisticsRequest.Companies" 
+				id="company-select"
+				class="mb-2 form-control"
+			>
+				@foreach (var item in companies)
+				{
+					<option value="@item.Name" >@item.Name</option>
+				}
+			</select>
+			<div 
+				class="d-flex justify-content-start align-items-start flex-wrap gap-1"
+				id="selected-companies"
+			>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="row form-group gy-1">
+		<div class="col-12 text-end">
+			<input type="submit" value="Show" class="btn btn-primary" />
+		</div>
+	</div>
+</form>
 
 <div class="container">
   <canvas id="chart"></canvas>
-</div  >
+</div>
 
 
-@*@section Scripts{
-    <script>
-      const ctx = document.getElementById('chart');
-      const data = @Json.Serialize(data);
-
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: data.map(i=>i.month),
-          datasets: [{
-            data: data.map(i=>i.amount),
-            borderWidth: 1
-          }]
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        }
-      });
-    </script>
-}*@
+@section Scripts{
+	<script>
+		const Model = @Json.Serialize(Model);
+	</script>
+	<script src="~/js/Statistics/index.js"></script>
+}
 
 
 

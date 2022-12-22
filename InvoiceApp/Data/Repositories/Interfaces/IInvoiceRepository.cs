@@ -14,6 +14,6 @@ namespace InvoiceApp.Data.Repositories.Interfaces
 
         public Task<bool> Delete(int id);
 
-        public Task<List<MonthStatistic>> GetYearRevenueStatistic(int year, string[] companies = null);
+        public Task<List<MonthStatistics>> GetYearRevenueStatistics(int year, string[] companies = null);
     }
 }

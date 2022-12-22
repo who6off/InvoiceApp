@@ -1,6 +1,6 @@
 ﻿namespace InvoiceApp.Data.Models
 {
-    public class MonthStatistic
+    public class MonthStatistics
     {
         public Company? Company { get; set; }
 

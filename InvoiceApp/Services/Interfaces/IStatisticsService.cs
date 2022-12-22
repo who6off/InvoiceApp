@@ -5,7 +5,7 @@ namespace InvoiceApp.Services.Interfaces
 {
     public interface IStatisticsService
     {
-        public Task<RevenueYearStatistic[]> GetYearRevenueStatistic(StatisticRequestViewModel model);
+        public Task<RevenueYearStatistics[]> GetYearRevenueStatistics(StatisticRequestViewModel model);
     }
 
 

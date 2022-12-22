@@ -4,24 +4,29 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace InvoiceApp.Controllers
 {
-    public class StatisticsController : Controller
-    {
-        private readonly IStatisticsService _statisticsService;
-        public StatisticsController(IStatisticsService statisticsService)
-        {
-            _statisticsService = statisticsService;
-        }
+	public class StatisticsController : Controller
+	{
+		private readonly IStatisticsService _statisticsService;
+		public StatisticsController(IStatisticsService statisticsService)
+		{
+			_statisticsService = statisticsService;
+		}
 
 
-        public async Task<IActionResult> Index()
-        {
-            var statistics = await _statisticsService.GetYearRevenueStatistic(new StatisticRequestViewModel()
-            {
-                Year = 2022,
-                Companies = new string[] { "Nestle", "Skynet" }
-            });
+		public async Task<IActionResult> Index()
+		{
+			return View(new IndexViewModel());
+		}
 
-            return View(statistics);
-        }
-    }
+
+		[HttpPost]
+		public async Task<IActionResult> Index(IndexViewModel model)
+		{
+			var statistics = await _statisticsService.GetYearRevenueStatistics(model.StatisticsRequest);
+
+			model.Statistics = statistics;
+
+			return View(model);
+		}
+	}
 }
