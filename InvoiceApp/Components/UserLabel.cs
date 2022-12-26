@@ -1,7 +1,7 @@
 ﻿using InvoiceApp.Identity.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
-namespace InvoiceApp.Component
+namespace InvoiceApp.Components
 {
 	public class UserLabel : ViewComponent
 	{

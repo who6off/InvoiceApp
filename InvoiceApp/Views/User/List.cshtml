@@ -1,36 +1,89 @@
-﻿@using InvoiceApp.ViewModels.User
+﻿@using InvoiceApp.ViewModels.Components;
+@using InvoiceApp.ViewModels.User
 
-@model UserEditViewModel;
+@model UserListViewModel;
 
 @{
-
+    var (Users, Parameters) = (Model.Users, Model.Parameters);
 }
 
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Surname</th>
-            <th scope="col">Email</th>
-            <th scope="col">Date of birth</th>
-            <th scope="col">Role</th>
-			<th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model.Users)
-        {
+
+<form
+    asp-controller="User"
+    asp-action="List"
+    method="get"
+    class="container card py-2 px-3 d-grid gap-2"
+>
+    <div class="row p-0">
+        <div class="col-2 p-0 ">
+            <label class="form-label">Name:</label>
+        </div>
+        <div class="col-10 p-0">
+            <input name="Name" value="@Parameters.Name" type="text" class="form-control" />
+        </div>
+    </div>
+
+    <div class="row p-0">
+        <div class="col-2 p-0">
+            <label class="form-label">Surname:</label>
+        </div>
+        <div class="col-10 p-0">
+            <input name="Surname" value="@Parameters.Surname" type="text" class="form-control" />
+        </div>
+    </div>
+
+    <div class="row p-0">
+        <div class="col-2 p-0">
+            <label class="form-label">Email:</label>
+        </div>
+        <div class="col-10 p-0">
+            <input name="Email" value="@Parameters.Email" type="email" class="form-control" />
+        </div>
+    </div>
+
+    <div class="row p-0">
+        <div class="col p-0 d-flex justify-content-end align-items-center">
+            <input value="Search" type="submit" class="btn btn-primary m-0" />
+        </div>
+    </div>
+</form>
+
+<div class="table-wrapper">
+    <table class="table fs-6">
+        <thead>
             <tr>
-                <td>@user.Name</td>
-                <td>@user.Surname</td>
-                <td>@user.Email</td>
-                <td>@user.DateObBirth.ToString("yyyy-MM-dd")</td>
-                <td>@user.RoleName</td>
-                <td> 
-                    <a asp-controller="User" asp-action="Edit" asp-route-id="@user.Id" class="btn btn-warning">Edit</a> 
-                    <a asp-controller="User" asp-action="Delete" asp-route-id="@user.Id" class="btn btn-danger">Delete</a> 
-                </td>
-             </tr>
-        }
-    </tbody>
-</table>
+                <th scope="col" style="width: 15%">Name</th>
+                <th scope="col" style="width: 25%">Surname</th>
+                <th scope="col" style="width: 25%">Email</th>
+                <th scope="col" style="width: 10%">Date of birth</th>
+                <th scope="col" style="width: 10%">Role</th>
+                <th style="width: 15%"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Users)
+            {
+                <tr>
+                    <td>@user.Name</td>
+                    <td>@user.Surname</td>
+                    <td>@user.Email</td>
+                    <td>@user.DateObBirth.ToString("yyyy-MM-dd")</td>
+                    <td>@user.RoleName</td>
+                    <td> 
+                        <a asp-controller="User" asp-action="Edit" asp-route-id="@user.Id" class="btn btn-warning">Edit</a> 
+                        <a asp-controller="User" asp-action="Delete" asp-route-id="@user.Id" class="btn btn-danger">Delete</a> 
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@await Component.InvokeAsync("Pagination", new PaginationViewModel()
+{
+    ControllerName = "User",
+    ActionName = "List",
+    CurrentPage = 3,
+    PagesAmount = 10,
+})

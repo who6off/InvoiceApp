@@ -1,0 +1,53 @@
+﻿@using InvoiceApp.Data.RequestParameters;
+@using InvoiceApp.ViewModels.Components;
+
+@model PaginationViewModel
+
+@{
+}
+
+<div class="container p-0">
+	<div class="row p-0">
+        <div class="col-6 p-0">
+			<div class="row">
+                <div class="col-2 p-0">Page: </div>
+
+                <div class="col-4 p-0">
+                    <select class="page-list form-control">
+                        @for (int i = 0; i < Model.PagesAmount; i++)
+                        {
+                            var pageNumberStr = (i + 1).ToString();
+
+                            if (i == Model.CurrentPage)
+                            {
+                                <option selected>@pageNumberStr</option>
+                                continue;
+                            };
+
+                            Model.RouteValues["Page"] = i.ToString();
+                            var path = Url.Action(Model.ActionName, Model.ControllerName, Model.RouteValues);
+
+                            <option data-path="@path">@pageNumberStr</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-3 p-0"> of @Model.PagesAmount</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        const $pageList = document.querySelector('.page-list');
+
+        $pageList.addEventListener('change', () => {
+            const path = $pageList.options[$pageList.selectedIndex].dataset.path;
+
+            if (!path) return;
+
+            window.location.href = path;
+        })
+    </script>
+}
