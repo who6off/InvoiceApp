@@ -6,40 +6,34 @@
 @{
 }
 
-<div class="container p-0">
-	<div class="row p-0">
-        <div class="col-6 p-0">
-			<div class="row">
-                <div class="col-2 p-0">Page: </div>
+<div class="container p-0 d-flex justify-content-start align-items-center gap-2">
+    <span>Page:</span>
 
-                <div class="col-4 p-0">
-                    <select class="page-list form-control">
-                        @for (int i = 0; i < Model.PagesAmount; i++)
-                        {
-                            var pageNumberStr = (i + 1).ToString();
+    <div style="width: 80px">
+        <select class="page-list form-control mx-1 m">
+            @for (int i = 0; i < Model.Data.PageCount; i++)
+            {
+                var pageNumber = i + 1;
 
-                            if (i == Model.CurrentPage)
-                            {
-                                <option selected>@pageNumberStr</option>
-                                continue;
-                            };
+                if (i == Model.Data.CurrentPage)
+                {
+                    <option selected>@pageNumber</option>
+                    continue;
+                };
 
-                            Model.RouteValues["Page"] = i.ToString();
-                            var path = Url.Action(Model.ActionName, Model.ControllerName, Model.RouteValues);
+                Model.RouteValues["Page"] = i.ToString();
+                var path = Url.Action(Model.ActionName, Model.ControllerName, Model.RouteValues);
 
-                            <option data-path="@path">@pageNumberStr</option>
-                        }
-                    </select>
-                </div>
-
-                <div class="col-3 p-0"> of @Model.PagesAmount</div>
-            </div>
-        </div>
+                <option data-path="@path">@pageNumber</option>
+            }
+        </select>
     </div>
+
+    <span>of @Model.Data.PageCount</span>
 </div>
 
-@section Scripts{
-    <script>
+<script>
+    document.addEventListener('DOMContentLoaded', e => {
         const $pageList = document.querySelector('.page-list');
 
         $pageList.addEventListener('change', () => {
@@ -49,5 +43,6 @@
 
             window.location.href = path;
         })
-    </script>
-}
+    });
+</script>
+

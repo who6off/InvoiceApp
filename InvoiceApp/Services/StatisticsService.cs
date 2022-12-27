@@ -2,7 +2,7 @@
 using InvoiceApp.Data.Repositories.Interfaces;
 using InvoiceApp.Helpers;
 using InvoiceApp.Services.Interfaces;
-using InvoiceApp.Types.Statistics;
+using InvoiceApp.Models.Statistics;
 using InvoiceApp.ViewModels.Statistics;
 
 namespace InvoiceApp.Services

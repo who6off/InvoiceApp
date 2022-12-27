@@ -1,4 +1,6 @@
-﻿namespace InvoiceApp.Data.RequestParameters
+﻿using InvoiceApp.Data.RequestParameters;
+
+namespace InvoiceApp.Identity.RequestParameters
 {
     public class UserRequestParameters : ARequestParameters
     {

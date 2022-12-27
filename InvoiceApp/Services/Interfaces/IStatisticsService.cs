@@ -1,4 +1,4 @@
-﻿using InvoiceApp.Types.Statistics;
+﻿using InvoiceApp.Models.Statistics;
 using InvoiceApp.ViewModels.Statistics;
 
 namespace InvoiceApp.Services.Interfaces

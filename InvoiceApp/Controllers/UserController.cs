@@ -1,6 +1,6 @@
-﻿using InvoiceApp.Data.RequestParameters;
-using InvoiceApp.Identity.Constants;
+﻿using InvoiceApp.Identity.Constants;
 using InvoiceApp.Identity.Helpers;
+using InvoiceApp.Identity.RequestParameters;
 using InvoiceApp.Identity.Services.Interfaces;
 using InvoiceApp.Identity.ViewModels;
 using InvoiceApp.ViewModels.User;
@@ -89,18 +89,6 @@ namespace InvoiceApp.Controllers
         }
 
 
-        //[HttpGet]
-        //[Authorize(Roles = $"{UserRoles.Admin}")]
-        //public async Task<IActionResult> List()
-        //{
-        //	var users = await _userService.GetAll();
-        //	return View(new UserListViewModel()
-        //	{
-        //		Users = users,
-        //	});
-        //}
-
-
         [HttpGet]
         [Authorize(Roles = $"{UserRoles.Admin}")]
         public async Task<IActionResult> List([FromQuery] UserRequestParameters parameters)
@@ -115,7 +103,7 @@ namespace InvoiceApp.Controllers
         [Route("List")]
         public async Task<IActionResult> ListWithFilteredParams([FromQuery] UserRequestParameters parameters)
         {
-            var users = await _userService.GetAll();
+            var users = await _userService.Get(parameters);
             return View("List", new UserListViewModel()
             {
                 Users = users,

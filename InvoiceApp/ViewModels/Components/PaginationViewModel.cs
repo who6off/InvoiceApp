@@ -1,4 +1,6 @@
-﻿namespace InvoiceApp.ViewModels.Components
+﻿using InvoiceApp.Helpers;
+
+namespace InvoiceApp.ViewModels.Components
 {
     public class PaginationViewModel
     {
@@ -6,9 +8,7 @@
 
         public string ActionName { get; set; } = String.Empty;
 
-        public uint CurrentPage { get; set; }
-
-        public uint PagesAmount { get; set; }
+        public IPagedList Data { get; set; }
 
         public Dictionary<string, string>? RouteValues { get; set; }
     }

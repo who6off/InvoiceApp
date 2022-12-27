@@ -1,4 +1,6 @@
-﻿using InvoiceApp.Identity.Models;
+﻿using InvoiceApp.Helpers;
+using InvoiceApp.Identity.Models;
+using InvoiceApp.Identity.RequestParameters;
 using InvoiceApp.Identity.ViewModels;
 using InvoiceApp.ViewModels.User;
 
@@ -11,6 +13,8 @@ namespace InvoiceApp.Identity.Services.Interfaces
 		public Task SignOut();
 
 		public Task<AppUser[]> GetAll();
+
+		public Task<PagedList<AppUser>> Get(UserRequestParameters parameters);
 
 		public Task<AppUser?> GetById(string id);
 

@@ -1,6 +1,6 @@
 ﻿using InvoiceApp.Data.Models;
 
-namespace InvoiceApp.Types.Statistics
+namespace InvoiceApp.Models.Statistics
 {
 	public class RevenueYearStatistics
 	{
