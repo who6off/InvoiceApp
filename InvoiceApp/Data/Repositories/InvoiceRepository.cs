@@ -47,13 +47,11 @@ namespace InvoiceApp.Data.Repositories
 				FROM 
 					[InvoicesView]
                 ORDER BY 
-					[InvoicesView].[LastUpdateDate] DESC;
-                ORDER BY 
-                    [InvoicesView].[Id] 
+					[InvoicesView].[LastUpdateDate] DESC
                 OFFSET @Skip ROWS 
                 FETCH NEXT @Take ROWS ONLY;
 
-				SELECT COUNT() FROM [Invoices];
+				SELECT COUNT(*) FROM [Invoices];
             ";
 
             IEnumerable<Invoice> source = new Invoice[] { };
@@ -63,8 +61,8 @@ namespace InvoiceApp.Data.Repositories
             {
                 using (var multi = await connection.QueryMultipleAsync(query, new
                 {
-                    Skip = parameners.Page * parameners.PageSize,
-                    Take = parameners.Page
+                    Skip = (int)parameners.Page * parameners.PageSize,
+                    Take = (int)parameners.PageSize
                 }))
                 {
                     source = (await multi.ReadAsync<InvoiceDbView>()).Select(i => new Invoice(i));
