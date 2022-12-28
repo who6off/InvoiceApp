@@ -4,6 +4,25 @@
 @model PaginationViewModel
 
 @{
+    var buttonClass = "btn btn-primary d-flex justify-content-center align-items-center p-2";
+    var disabledButtonClass = "btn btn-primary d-flex justify-content-center align-items-center p-2 disabled";
+
+    var firstButtonClass = (Model.Data.CurrentPage == 0) ? disabledButtonClass : buttonClass;
+    var lastButtonClass = (Model.Data.CurrentPage == (Model.Data.PageCount - 1)) ? disabledButtonClass : buttonClass; ;
+    var previousButtonClass = (Model.Data.HasPrevious) ? buttonClass : disabledButtonClass;
+    var nextButtonClass = (Model.Data.HasNext) ? buttonClass : disabledButtonClass;
+
+    Model.RouteValues["Page"] = "0";
+    var firstButtonUrl = Url.Action(Model.ActionName, Model.ControllerName, Model.RouteValues);
+
+    Model.RouteValues["Page"] = (Model.Data.PageCount - 1).ToString();
+    var lastButtonUrl = Url.Action(Model.ActionName, Model.ControllerName, Model.RouteValues);
+
+    Model.RouteValues["Page"] = (Model.Data.CurrentPage - 1).ToString();
+    var previousButtonUrl = Url.Action(Model.ActionName, Model.ControllerName, Model.RouteValues);
+
+    Model.RouteValues["Page"] = (Model.Data.CurrentPage + 1).ToString(); ;
+    var nextButtonUrl = Url.Action(Model.ActionName, Model.ControllerName, Model.RouteValues);
 }
 
 <div class="container p-0 d-flex justify-content-start align-items-center gap-2">
@@ -30,6 +49,33 @@
     </div>
 
     <span>of @Model.Data.PageCount</span>
+
+   
+    <a class="@firstButtonClass" href="@firstButtonUrl">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            <path fill-rule="evenodd" d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        </svg>
+    </a>
+
+    <a class="@previousButtonClass" href="@previousButtonUrl">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        </svg>
+    </a>
+
+    <a class="@nextButtonClass" href="@nextButtonUrl">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+        </svg>
+    </a>
+
+    <a class="@lastButtonClass" href="@lastButtonUrl">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z" />
+            <path fill-rule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z" />
+        </svg>
+    </a>
 </div>
 
 <script>

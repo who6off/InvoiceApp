@@ -1,5 +1,6 @@
 ﻿using InvoiceApp.Data.Models;
 using InvoiceApp.Data.Repositories.Interfaces;
+using InvoiceApp.Data.RequestParameters;
 using InvoiceApp.Helpers;
 using InvoiceApp.Identity.Helpers;
 using InvoiceApp.Services.Interfaces;
@@ -24,9 +25,9 @@ namespace InvoiceApp.Services
         }
 
 
-        public Task<List<Invoice>> GetAll()
+        public Task<PagedList<Invoice>> Get(InvoiceRequestParemeters paremeters)
         {
-            return _invoiceRepository.GetAll();
+            return _invoiceRepository.Get(paremeters);
         }
 
 

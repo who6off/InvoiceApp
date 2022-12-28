@@ -1,11 +1,13 @@
 ﻿using InvoiceApp.Data.Models;
+using InvoiceApp.Data.RequestParameters;
+using InvoiceApp.Helpers;
 using InvoiceApp.ViewModels.Invoice;
 
 namespace InvoiceApp.Services.Interfaces
 {
 	public interface IInvoiceService
 	{
-		public Task<List<Invoice>> GetAll();
+		public Task<PagedList<Invoice>> Get(InvoiceRequestParemeters paremeters);
 
 		public Task<Invoice?> GetById(int id);
 

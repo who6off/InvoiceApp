@@ -1,5 +1,6 @@
 ﻿@using InvoiceApp.Data.Models;
 @using InvoiceApp.Helpers;
+@using InvoiceApp.ViewModels.Components;
 @using InvoiceApp.ViewModels.Invoice;
 @using System.Globalization;
 @model ListViewModel
@@ -48,3 +49,10 @@
     </tbody>
 </table>
 </div>
+
+@await Component.InvokeAsync("Pagination", new PaginationViewModel()
+{
+    ControllerName = "Invoice",
+    ActionName = "List",
+    Data = Model.Invoices
+})

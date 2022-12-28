@@ -2,23 +2,27 @@
 {
     public abstract class ARequestParameters
     {
-        public const uint MAX_PAGE_SIZE = 50;
+        private const uint MAX_PAGE_SIZE = 50;
+
+        private uint _pageSize = 5;
 
         public uint Page { get; set; }
 
-        private uint _pageSize = 10;
         public uint PageSize
         {
             get => _pageSize;
             set => _pageSize = (value > MAX_PAGE_SIZE) ? MAX_PAGE_SIZE : value;
         }
 
+
         public ARequestParameters() { }
+
 
         public ARequestParameters(uint pageSize)
         {
             PageSize = pageSize;
         }
+
 
         public Dictionary<string, string> ToDictionary()
         {
@@ -29,14 +33,5 @@
 
             return dictionary;
         }
-
-        //protected Dictionary<string, string> ToDictionary(object parameters)
-        //{
-        //    return parameters.GetType().GetProperties().ToDictionary(
-        //        property => property.Name,
-        //        property => property.GetValue(parameters).ToString());
-        //}
-
-        //public abstract Dictionary<string, string> ToDictionary();
     };
 }

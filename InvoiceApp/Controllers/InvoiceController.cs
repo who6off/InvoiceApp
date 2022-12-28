@@ -1,5 +1,6 @@
 ﻿using InvoiceApp.Authorization;
 using InvoiceApp.Data.Models;
+using InvoiceApp.Data.RequestParameters;
 using InvoiceApp.Helpers;
 using InvoiceApp.Identity.Constants;
 using InvoiceApp.Services.Interfaces;
@@ -40,9 +41,9 @@ namespace InvoiceApp.Controllers
 
 
 		[Authorize]
-		public async Task<IActionResult> List()
+		public async Task<IActionResult> List([FromQuery] InvoiceRequestParemeters paremeters)
 		{
-			var invoices = await _invoiceService.GetAll();
+			var invoices = await _invoiceService.Get(paremeters);
 			return View(new ListViewModel()
 			{
 				Invoices = invoices

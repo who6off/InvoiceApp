@@ -1,4 +1,6 @@
 ﻿using InvoiceApp.Data.Models;
+using InvoiceApp.Data.RequestParameters;
+using InvoiceApp.Helpers;
 
 namespace InvoiceApp.Data.Repositories.Interfaces
 {
@@ -7,6 +9,8 @@ namespace InvoiceApp.Data.Repositories.Interfaces
         public Task<Invoice?> GetById(int id);
 
         public Task<List<Invoice>> GetAll();
+
+        public Task<PagedList<Invoice>> Get(InvoiceRequestParemeters parameners);
 
         public Task<Invoice?> Create(Invoice model);
 

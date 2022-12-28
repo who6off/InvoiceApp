@@ -1,7 +1,9 @@
-﻿namespace InvoiceApp.ViewModels.Invoice
+﻿using InvoiceApp.Helpers;
+
+namespace InvoiceApp.ViewModels.Invoice
 {
     public class ListViewModel
     {
-        public List<Data.Models.Invoice> Invoices { get; set; }
+        public PagedList<Data.Models.Invoice> Invoices { get; set; }
     }
 }
