@@ -46,12 +46,25 @@ namespace InvoiceApp.Data.Repositories
 					* 
 				FROM 
 					[InvoicesView]
+                WHERE
+                    [InvoicesView].[OwnerName] IS NOT NULL
+                    {(string.IsNullOrEmpty(parameners.CompanyName) ? "" : "AND [InvoicesView].[OwnerName]=@CompanyName")}
+                    {((parameners.Month is null) ? "" : "AND [InvoicesView].[Month]=@Month")}
+                    {((parameners.Status is null) ? "" : "AND [InvoicesView].[Status] in @Status")}
                 ORDER BY 
 					[InvoicesView].[LastUpdateDate] DESC
                 OFFSET @Skip ROWS 
                 FETCH NEXT @Take ROWS ONLY;
 
-				SELECT COUNT(*) FROM [Invoices];
+				SELECT 
+                    COUNT(*) 
+                FROM 
+					[InvoicesView]
+                WHERE
+                    [InvoicesView].[OwnerName] IS NOT NULL
+                    {(string.IsNullOrEmpty(parameners.CompanyName) ? "" : "AND [InvoicesView].[OwnerName]=@CompanyName")}
+                    {((parameners.Month is null) ? "" : "AND [InvoicesView].[Month]=@Month")}
+                    {((parameners.Status is null) ? "" : "AND [InvoicesView].[Status] in @Status")};
             ";
 
             IEnumerable<Invoice> source = new Invoice[] { };
@@ -61,6 +74,9 @@ namespace InvoiceApp.Data.Repositories
             {
                 using (var multi = await connection.QueryMultipleAsync(query, new
                 {
+                    CompanyName = parameners.CompanyName,
+                    Month = parameners.Month,
+                    Status = parameners.Status,
                     Skip = (int)parameners.Page * parameners.PageSize,
                     Take = (int)parameners.PageSize
                 }))
