@@ -5,7 +5,7 @@
         public uint CurrentPage { get; private set; }
         public uint PageSize { get; private set; }
         public int TotalCount { get; private set; }
-        public double PageCount { get; private set; }
+        public uint PageCount { get; private set; }
 
         public bool HasPrevious => CurrentPage != 0;
         public bool HasNext => CurrentPage != (PageCount - 1);
@@ -15,7 +15,7 @@
             CurrentPage = currentPage;
             PageSize = pageSize;
             TotalCount = totalCount;
-            PageCount = Math.Ceiling(totalCount / (double)pageSize);
+            PageCount = (uint)Math.Ceiling(totalCount / (double)pageSize);
 
             AddRange(source);
         }
@@ -26,7 +26,7 @@
         public uint CurrentPage { get; }
         public uint PageSize { get; }
         public int TotalCount { get; }
-        public double PageCount { get; }
+        public uint PageCount { get; }
         public bool HasPrevious { get; }
         public bool HasNext { get; }
     }

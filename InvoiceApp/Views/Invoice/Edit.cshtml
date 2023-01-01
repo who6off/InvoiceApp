@@ -6,7 +6,6 @@
 @model InvoiceViewModel
 
 @{
-	var dateString = Model.Month.ToString("yyyy-MM");
 	var companies = (await _companyService.GetAll()).Select(i => i.Name).ToArray();
 }
 
@@ -44,7 +43,7 @@
 			<label>Month: </label>
 		</div>
 		<div class="col-10">
-			<input asp-for="@Model.Month" type="month" value="@dateString" class="form-control" />
+			<input asp-for="@Model.Month" type="month" value="@Model.Month.ToString("yyyy-MM")" class="form-control" />
 			<span asp-validation-for="@Model.Month" class="text-danger"></span>
 		</div>
 	</div>

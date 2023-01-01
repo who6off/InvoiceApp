@@ -1,4 +1,5 @@
-﻿using InvoiceApp.Helpers;
+﻿using InvoiceApp.Data.RequestParameters;
+using InvoiceApp.Helpers;
 
 namespace InvoiceApp.ViewModels.Components
 {
@@ -10,6 +11,6 @@ namespace InvoiceApp.ViewModels.Components
 
         public IPagedList Data { get; set; }
 
-        public Dictionary<string, string>? RouteValues { get; set; }
+        public ARequestParameters Parameters { get; set; }
     }
 }

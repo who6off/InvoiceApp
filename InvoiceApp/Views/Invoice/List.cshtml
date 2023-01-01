@@ -1,12 +1,74 @@
 ﻿@using InvoiceApp.Data.Models;
 @using InvoiceApp.Helpers;
+@using InvoiceApp.Services.Interfaces;
 @using InvoiceApp.ViewModels.Components;
 @using InvoiceApp.ViewModels.Invoice;
 @using System.Globalization;
+
+@inject ICompanyService _companyService;
+
 @model ListViewModel
 
+
 @{
+    var (Invoices, Parameters) = (Model.Invoices, Model.Parameters);
+    var companies = (await _companyService.GetAll())
+        .Select(i => i.Name)
+        .Prepend("");
+    var companiesList = new SelectList(companies);
 }
+
+<form asp-controller="Invoice"
+      asp-action="List"
+      method="get"
+      class="container card py-2 px-3 d-grid gap-2"
+>
+    <div class="row p-0">
+        <div class="col-2 p-0 ">
+            <label class="form-label">Company:</label>
+        </div>
+        <div class="col-10 p-0">
+            <select asp-for="@Parameters.CompanyName" name="CompanyName" asp-items="@companiesList" class="form-control"></select>
+        </div>
+    </div>
+
+    <div class="row p-0">
+        <div class="col-2 p-0">
+            <label class="form-label">Month:</label>
+        </div>
+        <div class="col-10 p-0">
+            <input name="Month" value="@Parameters?.Month?.ToString("yyyy-MM")" type="month" class="form-control" />
+        </div>
+    </div>
+
+    <div class="row p-0">
+        <div class="col-2 p-0">
+            <label class="form-label">Status:</label>
+        </div>
+        <div class="col-10 d-flex justify-content-start align-items-center gap-4 p-0">
+            <div class=" d-flex justify-content-start align-items-center gap-1">
+                <input type="checkbox" data-value="@InvoiceStatuses.Submitted" class="status-checkbox form-check-input" />
+				<span>@InvoiceStatuses.Submitted</span>
+            </div>
+            <div class=" d-flex justify-content-start align-items-center gap-1">
+                <input type="checkbox" data-value="@InvoiceStatuses.Approved" class="status-checkbox form-check-input" />
+				<span>@InvoiceStatuses.Approved</span>
+            </div>
+            <div class=" d-flex justify-content-start align-items-center gap-1">
+                <input type="checkbox" data-value="@InvoiceStatuses.Rejected" class="status-checkbox form-check-input" />
+                <span>@InvoiceStatuses.Rejected</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row p-0">
+        <div class="col p-0 d-flex justify-content-end align-items-center">
+            <input value="Search" type="submit" class="btn btn-primary m-0" />
+        </div>
+    </div>
+</form>
+
+
 
 <div class="table-wrapper">
 <table class="table fs-6">
@@ -22,7 +84,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Invoices)
+        @foreach (var item in Invoices)
         {
             var statusClass = item.Status switch
             {
@@ -54,5 +116,47 @@
 {
     ControllerName = "Invoice",
     ActionName = "List",
-    Data = Model.Invoices
+    Data = Model.Invoices,
+    Parameters = Model.Parameters
 })
+
+
+@section Scripts{
+    <script>
+        const $checkboxes = document.querySelectorAll('.status-checkbox');
+
+        $checkboxes.forEach($checkbox => $checkbox.addEventListener('change', e => {
+            if(!$checkbox.checked){
+                const $input = $checkbox.form.querySelector(`input[value="${$checkbox.dataset.value}"]`);
+                if ($input) $input.remove();
+                return;
+            }
+
+            $checkbox.form.append(createHiddenInput($checkbox.dataset.value));
+        }));
+
+        initForm($checkboxes);
+
+
+        function createHiddenInput(value){
+            const $input = document.createElement('input');
+            $input.setAttribute('type', 'hidden');
+            $input.setAttribute('name', 'Status');
+            $input.setAttribute('value', value);
+            return $input;
+        }
+
+
+        function initForm($checkboxes) {
+            const statuses = @Json.Serialize(Parameters.Status);
+            if(!statuses || statuses.length < 1) return;
+
+            $checkboxes.forEach($checkbox => {
+                if(statuses.includes($checkbox.dataset.value)){
+                    $checkbox.checked = true;
+                    $checkbox.dispatchEvent(new Event('change'));
+                }
+            })
+        }
+    </script>
+}

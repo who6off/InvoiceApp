@@ -93,16 +93,6 @@ namespace InvoiceApp.Controllers
         [Authorize(Roles = $"{UserRoles.Admin}")]
         public async Task<IActionResult> List([FromQuery] UserRequestParameters parameters)
         {
-            var dictionary = parameters.ToDictionary();
-            return RedirectToAction(nameof(ListWithFilteredParams), dictionary);
-        }
-
-
-        [HttpGet]
-        [Authorize(Roles = $"{UserRoles.Admin}")]
-        [Route("List")]
-        public async Task<IActionResult> ListWithFilteredParams([FromQuery] UserRequestParameters parameters)
-        {
             var users = await _userService.Get(parameters);
             return View("List", new UserListViewModel()
             {
