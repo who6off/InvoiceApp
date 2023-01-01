@@ -43,28 +43,28 @@ namespace InvoiceApp.Data.Repositories
             using var connection = CreateConnection();
             var query = $@"
                 SELECT 
-					* 
-				FROM 
-					[InvoicesView]
+	                * 
+                INTO
+	                #TempData
+                FROM 
+	                [InvoicesView]
                 WHERE
                     [InvoicesView].[OwnerName] IS NOT NULL
-                    {(string.IsNullOrEmpty(parameners.CompanyName) ? "" : "AND [InvoicesView].[OwnerName]=@CompanyName")}
+	                {(string.IsNullOrEmpty(parameners.CompanyName) ? "" : "AND [InvoicesView].[OwnerName]=@CompanyName")}
                     {((parameners.Month is null) ? "" : "AND [InvoicesView].[Month]=@Month")}
                     {((parameners.Status is null) ? "" : "AND [InvoicesView].[Status] in @Status")}
+
+
+                SELECT
+	                * 
+                FROM
+	                #TempData
                 ORDER BY 
-					[InvoicesView].[LastUpdateDate] DESC
+	                #TempData.[LastUpdateDate] DESC
                 OFFSET @Skip ROWS 
                 FETCH NEXT @Take ROWS ONLY;
 
-				SELECT 
-                    COUNT(*) 
-                FROM 
-					[InvoicesView]
-                WHERE
-                    [InvoicesView].[OwnerName] IS NOT NULL
-                    {(string.IsNullOrEmpty(parameners.CompanyName) ? "" : "AND [InvoicesView].[OwnerName]=@CompanyName")}
-                    {((parameners.Month is null) ? "" : "AND [InvoicesView].[Month]=@Month")}
-                    {((parameners.Status is null) ? "" : "AND [InvoicesView].[Status] in @Status")};
+                SELECT COUNT(*) FROM #TempData;
             ";
 
             IEnumerable<Invoice> source = new Invoice[] { };
