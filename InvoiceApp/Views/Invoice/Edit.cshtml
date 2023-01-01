@@ -6,78 +6,11 @@
 @model InvoiceViewModel
 
 @{
-	var companies = (await _companyService.GetAll()).Select(i => i.Name).ToArray();
+	
 }
 
 <h2>Create Invoice</h2>
 
-<form 
-	asp-controller="Invoice"
-	asp-action="Edit" method="post"
-	class="container d-grid gap-3 p-2 card"
->
-	<input asp-for="@Model.Id" type="hidden" value="@Model.Id" />
-
-	<div class="row form-group gy-1">
-		<div class="col-2">
-			<label>Owner: </label>
-		</div>
-		<div class="col-10">
-			<input asp-for="@Model.Owner" type="text" value="@Model.Owner" id="company-input" class="form-control" />
-			<span asp-validation-for="@Model.Owner" class="text-danger"></span>
-		</div>
-	</div>
-
-	<div class="row form-group gy-1">
-		<div class="col-2">
-			<label>Amount: </label>
-		</div>
-		<div class="col-10">
-			<input asp-for="@Model.Amount" value="@Model.Amount" type="number" step="0.01" min="1" class="form-control" />
-			<span asp-validation-for="@Model.Amount" class="text-danger"></span>
-		</div>
-	</div>
-
-	<div class="row form-group gy-1">
-		<div class="col-2">
-			<label>Month: </label>
-		</div>
-		<div class="col-10">
-			<input asp-for="@Model.Month" type="month" value="@Model.Month.ToString("yyyy-MM")" class="form-control" />
-			<span asp-validation-for="@Model.Month" class="text-danger"></span>
-		</div>
-	</div>
-
-	<div class="row form-group gy-1">
-		<div class="col-12 text-end">
-			<input type="submit" value="Save" class="btn btn-primary" />
-		</div>
-	</div>
-</form>
-
-
-@section Scripts{
-	<script type="text/javascript">
-		debugger;
-		const companies = @Json.Serialize(companies);
-
-		var companyInput = new autoComplete({
-			selector: '#company-input',
-			placeHolder: 'Company name...',
-			data: {
-				src: companies
-			},
-			resultItem: {
-				highlight: true,
-			},
-			events: {
-				input: {
-					selection: (event) => {
-						const selection = event.detail.selection.value;
-						companyInput.input.value = selection;
-					}
-				}
-			}
-		});
-	</script>
-}
+@await Html.PartialAsync("_InvoiceForm", Model, new ViewDataDictionary(ViewData){
+	{"Controller", "Invoice"}, {"Action", "Edit"}, {"ButtonName", "Save"}
+})
