@@ -1,4 +1,18 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿initSearchForm();
 
-// Write your JavaScript code.
+
+function initSearchForm() {
+    document.querySelectorAll('.search-form').forEach($form => $form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData($form);
+
+        [...formData.keys()].forEach(key => formData.get(key) || formData.delete(key));
+
+        const url = new URL($form.action)
+        for (const [key, value] of formData.entries()) {
+            url.searchParams.append(key, value);
+        }
+
+        window.location.href = url.href;
+    }));
+}

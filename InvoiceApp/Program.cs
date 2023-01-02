@@ -25,14 +25,16 @@ namespace InvoiceApp
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+
             //Identity Services
             builder.Services.AddDbContext<AppIdentityDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityDb")));
 
-            options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityDb")));
             builder.Services.AddIdentity<AppUser, AppRole>()
                 .AddRoles<AppRole>()
                 .AddEntityFrameworkStores<AppIdentityDbContext>()
                 .AddDefaultTokenProviders();
+
             builder.Services.Configure<IdentityOptions>(opts =>
             {
                 opts.User.RequireUniqueEmail = true;
@@ -43,6 +45,7 @@ namespace InvoiceApp
                 opts.Password.RequireDigit = true;
                 opts.Password.RequireNonAlphanumeric = true;
             });
+
             builder.Services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "/User/SignIn";
@@ -50,6 +53,7 @@ namespace InvoiceApp
                 options.ExpireTimeSpan = TimeSpan.FromHours(5);
                 options.SlidingExpiration = true;
             });
+
             builder.Services.AddTransient<IAuthorizationHandler, AccountantAuthorizationHandler>();
             builder.Services.AddScoped<IUserClaimsPrincipalFactory<AppUser>, AppClaimsFactory>();
             builder.Services.AddScoped<IUserService, UserService>();

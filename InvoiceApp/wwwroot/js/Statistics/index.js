@@ -1,4 +1,5 @@
-﻿//@model ViewModels.Statistics.IndexViewModel
+﻿// @model ViewModels.Statistics.IndexViewModel
+// Model: ViewModels.Statistics.IndexViewModel
 
 const OVERALL = 'Overall';
 
