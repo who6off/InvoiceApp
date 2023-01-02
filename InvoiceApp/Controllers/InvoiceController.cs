@@ -43,7 +43,7 @@ namespace InvoiceApp.Controllers
         [Authorize]
         public async Task<IActionResult> List([FromQuery] InvoiceRequestParemeters parameters)
         {
-            var invoices = await _invoiceService.Get(parameters);
+            var invoices = await _invoiceService.Get(parameters, User);
             return View(new ListViewModel()
             {
                 Invoices = invoices,

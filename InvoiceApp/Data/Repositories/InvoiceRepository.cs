@@ -53,7 +53,7 @@ namespace InvoiceApp.Data.Repositories
 	                {(string.IsNullOrEmpty(parameners.CompanyName) ? "" : "AND [InvoicesView].[OwnerName]=@CompanyName")}
                     {((parameners.Month is null) ? "" : "AND [InvoicesView].[Month]=@Month")}
                     {((parameners.Status is null) ? "" : "AND [InvoicesView].[Status] in @Status")}
-
+                    {(string.IsNullOrEmpty(parameners.UserId) ? "" : "AND ([InvoicesView].[CreatorId]=@UserId OR [InvoicesView].[LastUpdateAuthorId]=@UserId)")}
 
                 SELECT
 	                * 
@@ -77,6 +77,7 @@ namespace InvoiceApp.Data.Repositories
                     CompanyName = parameners.CompanyName,
                     Month = parameners.Month,
                     Status = parameners.Status,
+                    UserId = parameners.UserId,
                     Skip = (int)parameners.Page * parameners.PageSize,
                     Take = (int)parameners.PageSize
                 }))

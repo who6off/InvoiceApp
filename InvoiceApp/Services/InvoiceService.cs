@@ -2,9 +2,11 @@
 using InvoiceApp.Data.Repositories.Interfaces;
 using InvoiceApp.Data.RequestParameters;
 using InvoiceApp.Helpers;
+using InvoiceApp.Identity.Constants;
 using InvoiceApp.Identity.Helpers;
 using InvoiceApp.Services.Interfaces;
 using InvoiceApp.ViewModels.Invoice;
+using System.Security.Claims;
 
 namespace InvoiceApp.Services
 {
@@ -25,9 +27,14 @@ namespace InvoiceApp.Services
         }
 
 
-        public Task<PagedList<Invoice>> Get(InvoiceRequestParemeters paremeters)
+        public Task<PagedList<Invoice>> Get(InvoiceRequestParemeters parameters, ClaimsPrincipal? user = null)
         {
-            return _invoiceRepository.Get(paremeters);
+            if ((user is not null) && (user.IsInRole(UserRoles.Accountant)))
+            {
+                parameters.UserId = user.GetId();
+            }
+
+            return _invoiceRepository.Get(parameters);
         }
 
 
