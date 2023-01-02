@@ -1,0 +1,27 @@
+﻿.card-link {
+    width: 150px;
+    height: 150px;
+    transition: 0.5s ease-in-out;
+}
+
+    .card-link span {
+        text-transform: uppercase !important;
+    }
+
+    .card-link:hover {
+        box-shadow: 0 0 16px rgba(33,33,33,.2);
+    }
+
+        .card-link:hover span {
+            color: var(--bs-info) !important;
+        }
+
+
+    .card-link svg {
+        width: 80px;
+        height: 80px;
+    }
+
+        .card-link svg path {
+            fill: var(--bs-primary)
+        }
