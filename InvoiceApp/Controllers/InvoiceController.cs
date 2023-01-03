@@ -46,6 +46,22 @@ namespace InvoiceApp.Controllers
             var invoices = await _invoiceService.Get(parameters, User);
             return View(new ListViewModel()
             {
+                ActionName = nameof(List),
+                Invoices = invoices,
+                Parameters = parameters
+            });
+        }
+
+
+        [Authorize(Roles = $"{UserRoles.Manager}, {UserRoles.Admin}")]
+        [Route("[controller]/List/User/{UserId:required}")]
+        public async Task<IActionResult> ListByUser(InvoiceRequestParemeters parameters)
+        {
+            var request = this.HttpContext.Request;
+            var invoices = await _invoiceService.Get(parameters);
+            return View("List", new ListViewModel()
+            {
+                ActionName = nameof(ListByUser),
                 Invoices = invoices,
                 Parameters = parameters
             });

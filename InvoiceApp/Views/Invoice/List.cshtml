@@ -19,7 +19,7 @@
 }
 
 <form asp-controller="Invoice"
-      asp-action="List"
+      asp-action="@Model.ActionName"
       method="get"
       class="search-form container card py-2 px-3 d-grid gap-2"
 >
@@ -115,7 +115,7 @@
 @await Component.InvokeAsync("Pagination", new PaginationViewModel()
 {
     ControllerName = "Invoice",
-    ActionName = "List",
+    ActionName = Model.ActionName,
     Data = Model.Invoices,
     Parameters = Model.Parameters
 })
