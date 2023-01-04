@@ -8,10 +8,12 @@ using InvoiceApp.Identity.Helpers;
 using InvoiceApp.Identity.Models;
 using InvoiceApp.Identity.Services;
 using InvoiceApp.Identity.Services.Interfaces;
+using InvoiceApp.Middleware;
 using InvoiceApp.Services;
 using InvoiceApp.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 namespace InvoiceApp
@@ -21,6 +23,9 @@ namespace InvoiceApp
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -59,6 +64,7 @@ namespace InvoiceApp
             builder.Services.AddScoped<IUserService, UserService>();
 
             builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+            builder.Services.AddTransient<IActionContextAccessor, ActionContextAccessor>();
 
             builder.Services.AddSingleton<DapperContext>();
 
@@ -78,6 +84,10 @@ namespace InvoiceApp
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseSession();
+            app.UseExceptionHandlingMiddleware();
+
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

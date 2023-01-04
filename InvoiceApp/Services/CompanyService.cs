@@ -1,6 +1,6 @@
 ﻿using InvoiceApp.Data.Models;
 using InvoiceApp.Data.Repositories.Interfaces;
-using InvoiceApp.Helpers;
+using InvoiceApp.Helpers.Exceptions;
 using InvoiceApp.Services.Interfaces;
 
 namespace InvoiceApp.Services

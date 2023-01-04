@@ -2,6 +2,7 @@
 using InvoiceApp.Data.Repositories.Interfaces;
 using InvoiceApp.Data.RequestParameters;
 using InvoiceApp.Helpers;
+using InvoiceApp.Helpers.Exceptions;
 using InvoiceApp.Identity.Constants;
 using InvoiceApp.Identity.Helpers;
 using InvoiceApp.Services.Interfaces;
@@ -31,7 +32,14 @@ namespace InvoiceApp.Services
         {
             if ((user is not null) && (user.IsInRole(UserRoles.Accountant)))
             {
-                parameters.UserId = user.GetId();
+                var userId = user.GetId();
+
+                if (!string.IsNullOrEmpty(parameters.UserId) && (parameters.UserId != userId))
+                {
+                    throw new AccessDeniedException("The accountant is not allowed to see invoices of others");
+                }
+
+                parameters.UserId = userId;
             }
 
             return _invoiceRepository.Get(parameters);

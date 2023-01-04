@@ -1,12 +1,12 @@
 ﻿using InvoiceApp.Data.Models;
-using InvoiceApp.Helpers;
+using InvoiceApp.Helpers.Exceptions;
 using InvoiceApp.Services.Interfaces;
 using InvoiceApp.ViewModels.Company;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvoiceApp.Controllers
 {
-	public class CompanyController : Controller
+    public class CompanyController : Controller
 	{
 		private readonly ICompanyService _companyServce;
 
