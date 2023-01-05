@@ -1,0 +1,104 @@
+﻿@using InvoiceApp.ViewModels.Components;
+
+@model DeletionModalViewModel
+
+@{
+    var messageId = Model.ModalId + "-message";
+    var spinnerId = Model.ModalId + "-spinner";
+    var btnNoId = Model.ModalId + "-btn-no";
+    var btnYesId = Model.ModalId + "-btn-yes";
+}
+
+<div class="modal fade" id="@Model.ModalId" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex justify-content-center align-items-center">
+				<div id="@messageId" class="w-100">@Model.Message</div>
+				<div id="@spinnerId" class="spinner-border text-danger" hidden>
+                    <span class="sr-only"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="@btnNoId" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <button id="@btnYesId" class="btn btn-danger">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const modalId = @Json.Serialize(Model.ModalId);
+        const messageId = @Json.Serialize(messageId);
+        const spinnerId = @Json.Serialize(spinnerId);
+        const btnNoId = @Json.Serialize(btnNoId);
+        const btnYesId = @Json.Serialize(btnYesId);
+        const messageText = @Json.Serialize(Model.Message);
+        const actionUrl = @Json.Serialize(Model.ActionUrl);
+
+        const $modal = document.getElementById(modalId);
+        const $message = document.getElementById(messageId);
+        const $spinner = document.getElementById(spinnerId);
+        const $btnYes = document.getElementById(btnYesId);
+        const $btnNo = document.getElementById(btnNoId);
+
+        const myModal = new bootstrap.Modal($modal, {
+            keyboard: false
+        });
+
+        document.querySelectorAll(`button[data-modal=${modalId}]`)
+            .forEach($btn => $btn.addEventListener('click', e => {
+                $message.textContent = messageText;
+                $message.hidden = false;
+                $btnNo.textContent = "No";
+                $btnYes.textContent = "Yes";
+                $btnYes.hidden = false;
+                myModal.toggle();
+               
+                $btnYes.onclick = async () => {
+                    $message.hidden = true;
+                    $spinner.hidden = false;
+                    let responce;
+
+                    try{
+                        window.addEventListener('click', blockClick, true);
+                        responce = await fetch(`${actionUrl}/${$btn.dataset.id}`, {
+                            method: 'DELETE'
+                        });
+                    }finally{
+                        window.removeEventListener('click', blockClick, true);
+                    }
+
+                    $message.hidden = false;
+                    $spinner.hidden = true;
+                    $btnNo.textContent = "Close";
+
+                    if(responce.ok){
+                        $message.textContent = "Deleted successfully!";
+                        $btnYes.hidden = true;
+
+                        const ondelete = $btn.dataset.ondelete;
+                        if(ondelete){
+                            const handler = new Function(ondelete);
+                            handler.call($btn);
+                        }
+                    }else{
+                        $message.textContent = "Error has been occurred!";
+                        $btnYes.textContent = "Try again";
+                    }
+                };
+        }));
+
+        function blockClick(e){
+            e.stopPropagation();
+            e.preventDefault();
+            return false;
+        }
+
+    });
+</script>

@@ -1,4 +1,5 @@
-﻿using InvoiceApp.Identity.Constants;
+﻿using InvoiceApp.Helpers.Exceptions;
+using InvoiceApp.Identity.Constants;
 using InvoiceApp.Identity.Helpers;
 using InvoiceApp.Identity.RequestParameters;
 using InvoiceApp.Identity.Services.Interfaces;
@@ -48,9 +49,11 @@ namespace InvoiceApp.Controllers
 
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Profile()
         {
-            var user = await _userService.GetById(User.GetId()); ;
+            var user = await _userService.GetById(User.GetId());
+
             return View(new ProfileViewModel()
             {
                 User = user
@@ -110,7 +113,9 @@ namespace InvoiceApp.Controllers
             var user = await _userService.GetById(id);
 
             if (user is null)
-                return RedirectToAction(nameof(List));
+            {
+                throw new NotFoundException("User not found.");
+            }
 
             return View(new UserViewModel()
             {
@@ -135,17 +140,39 @@ namespace InvoiceApp.Controllers
 
             var user = await _userService.Update(model);
 
+            if (user is null)
+            {
+                throw new AppException("The error has occurred while update.");
+            }
+
             return View("UserInfo", new UserInfoViewModel(user, model, "User Update Info"));
         }
 
 
         [HttpGet]
         [Authorize(Roles = $"{UserRoles.Admin}")]
+        public async Task<IActionResult> Delete(string id, string? returnUrl)
+        {
+            var isDeleted = await _userService.Delete(id);
+
+            if (!isDeleted)
+            {
+                throw new AppException("The error has occurred while deletion.");
+            }
+
+            return string.IsNullOrEmpty(returnUrl)
+                ? RedirectToAction("List", "User")
+                : Redirect(returnUrl);
+        }
+
+
+        [HttpDelete]
+        [Authorize(Roles = $"{UserRoles.Admin}")]
         public async Task<IActionResult> Delete(string id)
         {
             var isDeleted = await _userService.Delete(id);
 
-            return RedirectToAction(nameof(List));
+            return isDeleted ? Ok() : BadRequest();
         }
     }
 }

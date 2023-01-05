@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace InvoiceApp.Controllers
 {
-    public class CompanyController : Controller
+	public class CompanyController : Controller
 	{
 		private readonly ICompanyService _companyServce;
 
@@ -54,7 +54,9 @@ namespace InvoiceApp.Controllers
 		{
 			var company = await _companyServce.GetById(id);
 			if (company is null)
-				return this.NotFound();
+			{
+				throw new NotFoundException("Company is not found.");
+			}
 
 			return View(company);
 		}
@@ -87,7 +89,9 @@ namespace InvoiceApp.Controllers
 		{
 			var company = await _companyServce.GetById(id);
 			if (company is null)
-				return NotFound();
+			{
+				throw new NotFoundException("Company is not found.");
+			}
 
 			return View(new CompanyInfoViewModel()
 			{

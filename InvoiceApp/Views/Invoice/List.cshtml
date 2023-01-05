@@ -9,13 +9,13 @@
 
 @model ListViewModel
 
-
 @{
     var (Invoices, Parameters) = (Model.Invoices, Model.Parameters);
     var companies = (await _companyService.GetAll())
         .Select(i => i.Name)
         .Prepend("");
     var companiesList = new SelectList(companies);
+    var deletionModalId = "deletion-modal";
 }
 
 <form asp-controller="Invoice"
@@ -104,7 +104,12 @@
                 <td>
                         <a asp-controller="Invoice" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detais</a>
                         <a asp-controller="Invoice" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
-                        <a asp-controller="Invoice" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                        <button data-modal="@deletionModalId" data-id="@item.Id"
+                            data-ondelete="this.closest('tr').remove()"
+                            class ="btn btn-sm btn-danger"
+                        >
+                            Delete
+                        </button>
                 </td>
             </tr>
         }
@@ -118,6 +123,13 @@
     ActionName = Model.ActionName,
     Data = Model.Invoices,
     Parameters = Model.Parameters
+})
+
+@await Component.InvokeAsync("DeletionModal", new DeletionModalViewModel()
+{
+    ModalId = deletionModalId,
+    Message = "Are you sure?",
+    ActionUrl = Url.Action("Delete", "Invoice")
 })
 
 
