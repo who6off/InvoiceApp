@@ -13,3 +13,14 @@
 span.field-validation-valid {
     display: none;
 }
+
+.validation-summary-errors > ul {
+    padding: 0 0 0 0 !important;
+    margin: 0 0 0 0 !important;
+    list-style: none !important;
+}
+
+.validation-summary-errors li {
+    padding: 0 0 0 0 !important;
+    margin: 0 0 0 0 !important;
+}

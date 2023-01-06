@@ -33,6 +33,12 @@ namespace InvoiceApp.Controllers
         {
             var user = await _userService.SignIn(model);
 
+            if (user is null)
+            {
+                ModelState.AddModelError("", "Invalid user credentials!");
+                return View(model);
+            }
+
             return string.IsNullOrEmpty(returnUrl)
                 ? RedirectToAction("Index", "Home")
                 : Redirect(returnUrl);
