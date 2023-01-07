@@ -6,11 +6,13 @@
 @model Invoice
 
 @{
+	ViewData["Title"] = "Invoice details";
 	var isAccountant = User.GetRole() == UserRoles.Accountant;
 }
 
 
 <pre>@JsonSerializer.Serialize(Model, new JsonSerializerOptions() { WriteIndented = true })</pre>
+
 
 @if(!isAccountant)
 {

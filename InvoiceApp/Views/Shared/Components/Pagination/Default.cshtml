@@ -6,23 +6,38 @@
 @{
     var buttonClass = "btn btn-primary d-flex justify-content-center align-items-center p-2";
     var disabledButtonClass = "btn btn-primary d-flex justify-content-center align-items-center p-2 disabled";
+    string firstButtonClass = "", lastButtonClass = "", previousButtonClass = "", nextButtonClass = "";
+    string firstButtonUrl = "", lastButtonUrl = "", previousButtonUrl = "", nextButtonUrl = "";
 
-    var firstButtonClass = (Model.Data.CurrentPage == 0) ? disabledButtonClass : buttonClass;
-    var lastButtonClass = (Model.Data.CurrentPage == (Model.Data.PageCount - 1)) ? disabledButtonClass : buttonClass; ;
-    var previousButtonClass = (Model.Data.HasPrevious) ? buttonClass : disabledButtonClass;
-    var nextButtonClass = (Model.Data.HasNext) ? buttonClass : disabledButtonClass;
+    if (Model.Data.HasPrevious)
+    {
+        firstButtonClass = previousButtonClass =  buttonClass;
 
-    Model.Parameters.Page = 0;
-    var firstButtonUrl = Url.Action(Model.ActionName, Model.ControllerName, Model.Parameters);
+        Model.Parameters.Page = 0;
+        firstButtonUrl = Url.Action(Model.ActionName, Model.ControllerName, Model.Parameters);
 
-    Model.Parameters.Page = Model.Data.PageCount - 1;
-    var lastButtonUrl = Url.Action(Model.ActionName, Model.ControllerName, Model.Parameters);
+        Model.Parameters.Page = Model.Data.CurrentPage - 1;
+        previousButtonUrl = Url.Action(Model.ActionName, Model.ControllerName, Model.Parameters);
+    }
+    else
+    {
+        firstButtonClass = previousButtonClass = disabledButtonClass;
+    }
+    
+    if (Model.Data.HasNext)
+    {
+        lastButtonClass = nextButtonClass = buttonClass;
 
-    Model.Parameters.Page = Model.Data.CurrentPage - 1;
-    var previousButtonUrl = Url.Action(Model.ActionName, Model.ControllerName, Model.Parameters);
+        Model.Parameters.Page = Model.Data.PageCount - 1;
+        lastButtonUrl = Url.Action(Model.ActionName, Model.ControllerName, Model.Parameters);
 
-    Model.Parameters.Page = Model.Data.CurrentPage + 1;
-    var nextButtonUrl = Url.Action(Model.ActionName, Model.ControllerName, Model.Parameters);
+        Model.Parameters.Page = Model.Data.CurrentPage + 1;
+        nextButtonUrl = Url.Action(Model.ActionName, Model.ControllerName, Model.Parameters);
+    }
+    else
+    {
+        lastButtonClass = nextButtonClass = disabledButtonClass;
+    }
 }
 
 <div class="container p-0 d-flex justify-content-start align-items-center gap-2">

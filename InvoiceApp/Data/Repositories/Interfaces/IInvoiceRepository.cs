@@ -10,7 +10,7 @@ namespace InvoiceApp.Data.Repositories.Interfaces
 
         public Task<List<Invoice>> GetAll();
 
-        public Task<PagedList<Invoice>> Get(InvoiceRequestParemeters parameners);
+        public Task<PagedList<Invoice>> Get(InvoiceRequestParemeters parameters);
 
         public Task<Invoice?> Create(Invoice model);
 

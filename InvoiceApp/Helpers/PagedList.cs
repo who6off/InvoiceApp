@@ -8,7 +8,7 @@
         public uint PageCount { get; private set; }
 
         public bool HasPrevious => CurrentPage != 0;
-        public bool HasNext => CurrentPage != (PageCount - 1);
+        public bool HasNext => (CurrentPage != (PageCount - 1)) && (CurrentPage != PageCount);
 
         public PagedList(IEnumerable<T> source, uint currentPage, uint pageSize, int totalCount)
         {

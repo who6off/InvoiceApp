@@ -1,4 +1,6 @@
 ﻿using InvoiceApp.Data.Models;
+using InvoiceApp.Data.RequestParameters;
+using InvoiceApp.Helpers;
 
 namespace InvoiceApp.Services.Interfaces
 {
@@ -7,6 +9,8 @@ namespace InvoiceApp.Services.Interfaces
         public Task<Company?> GetById(int id);
 
         public Task<List<Company>> GetAll();
+
+        public Task<PagedList<Company>> Get(CompanyRequestParameters parameters);
 
         public Task<Company?> Create(string name);
 

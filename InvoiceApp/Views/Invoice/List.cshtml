@@ -10,6 +10,7 @@
 @model ListViewModel
 
 @{
+    ViewData["Title"] = "Invoices";
     var (Invoices, Parameters) = (Model.Invoices, Model.Parameters);
     var companies = (await _companyService.GetAll())
         .Select(i => i.Name)

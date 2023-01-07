@@ -1,5 +1,7 @@
 ﻿using InvoiceApp.Data.Models;
 using InvoiceApp.Data.Repositories.Interfaces;
+using InvoiceApp.Data.RequestParameters;
+using InvoiceApp.Helpers;
 using InvoiceApp.Helpers.Exceptions;
 using InvoiceApp.Services.Interfaces;
 
@@ -25,6 +27,12 @@ namespace InvoiceApp.Services
 		public Task<List<Company>> GetAll()
 		{
 			return _repository.GetAll();
+		}
+
+
+		public Task<PagedList<Company>> Get(CompanyRequestParameters parameters)
+		{
+			return _repository.Get(parameters);
 		}
 
 

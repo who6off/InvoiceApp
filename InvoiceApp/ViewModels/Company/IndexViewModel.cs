@@ -1,13 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using InvoiceApp.Data.RequestParameters;
+using InvoiceApp.Helpers;
 
 namespace InvoiceApp.ViewModels.Company
 {
     public class IndexViewModel
     {
-        [Required(ErrorMessage = "Input the name")]
-        [StringLength(100, MinimumLength = 1, ErrorMessage = "Input the name")]
-        public string NewCompanyName { get; set; }
+        public PagedList<Data.Models.Company> Companies { get; set; }
 
-        public List<Data.Models.Company>? Companies { get; set; }
+        public CompanyRequestParameters Parameters { get; set; }
     }
 }

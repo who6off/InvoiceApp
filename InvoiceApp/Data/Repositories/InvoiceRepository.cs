@@ -38,7 +38,7 @@ namespace InvoiceApp.Data.Repositories
         }
 
 
-        public async Task<PagedList<Invoice>> Get(InvoiceRequestParemeters parameners)
+        public async Task<PagedList<Invoice>> Get(InvoiceRequestParemeters parameters)
         {
             using var connection = CreateConnection();
             var query = $@"
@@ -50,10 +50,10 @@ namespace InvoiceApp.Data.Repositories
 	                [InvoicesView]
                 WHERE
                     [InvoicesView].[OwnerName] IS NOT NULL
-	                {(string.IsNullOrEmpty(parameners.CompanyName) ? "" : "AND [InvoicesView].[OwnerName]=@CompanyName")}
-                    {((parameners.Month is null) ? "" : "AND [InvoicesView].[Month]=@Month")}
-                    {((parameners.Status is null) ? "" : "AND [InvoicesView].[Status] in @Status")}
-                    {(string.IsNullOrEmpty(parameners.UserId) ? "" : "AND ([InvoicesView].[CreatorId]=@UserId OR [InvoicesView].[LastUpdateAuthorId]=@UserId)")}
+	                {(string.IsNullOrEmpty(parameters.CompanyName) ? "" : "AND [InvoicesView].[OwnerName]=@CompanyName")}
+                    {((parameters.Month is null) ? "" : "AND [InvoicesView].[Month]=@Month")}
+                    {((parameters.Status is null) ? "" : "AND [InvoicesView].[Status] in @Status")}
+                    {(string.IsNullOrEmpty(parameters.UserId) ? "" : "AND ([InvoicesView].[CreatorId]=@UserId OR [InvoicesView].[LastUpdateAuthorId]=@UserId)")}
 
                 SELECT
 	                * 
@@ -74,12 +74,12 @@ namespace InvoiceApp.Data.Repositories
             {
                 using (var multi = await connection.QueryMultipleAsync(query, new
                 {
-                    CompanyName = parameners.CompanyName,
-                    Month = parameners.Month,
-                    Status = parameners.Status,
-                    UserId = parameners.UserId,
-                    Skip = (int)parameners.Page * parameners.PageSize,
-                    Take = (int)parameners.PageSize
+                    CompanyName = parameters.CompanyName,
+                    Month = parameters.Month,
+                    Status = parameters.Status,
+                    UserId = parameters.UserId,
+                    Skip = (int)parameters.Page * parameters.PageSize,
+                    Take = (int)parameters.PageSize
                 }))
                 {
                     source = (await multi.ReadAsync<InvoiceDbView>()).Select(i => new Invoice(i));
@@ -88,10 +88,10 @@ namespace InvoiceApp.Data.Repositories
             }
             catch (Exception e)
             {
-                return new PagedList<Invoice>(source, 0, parameners.PageSize, 0);
+                return new PagedList<Invoice>(source, 0, parameters.PageSize, 0);
             }
 
-            return new PagedList<Invoice>(source, parameners.Page, parameners.PageSize, totalCount); ;
+            return new PagedList<Invoice>(source, parameters.Page, parameters.PageSize, totalCount);
         }
 
 
