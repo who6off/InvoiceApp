@@ -1,21 +1,24 @@
 ﻿using InvoiceApp.Data.Models;
 using InvoiceApp.Data.RequestParameters;
 using InvoiceApp.Helpers;
+using InvoiceApp.ViewModels.Company;
 
 namespace InvoiceApp.Services.Interfaces
 {
-    public interface ICompanyService
-    {
-        public Task<Company?> GetById(int id);
+	public interface ICompanyService
+	{
+		public Task<Company?> GetById(int id);
 
-        public Task<List<Company>> GetAll();
+		public Task<Company?> GetByName(string name);
 
-        public Task<PagedList<Company>> Get(CompanyRequestParameters parameters);
+		public Task<List<Company>> GetAll();
 
-        public Task<Company?> Create(string name);
+		public Task<PagedList<Company>> Get(CompanyRequestParameters parameters);
 
-        public Task<Company?> Update(Company company);
+		public Task<Company?> Create(CompanyViewModel viewModel);
 
-        public Task<bool> Delete(int id);
-    }
+		public Task<Company?> Update(CompanyViewModel viewModel);
+
+		public Task<bool> Delete(int id);
+	}
 }

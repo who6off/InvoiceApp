@@ -3,7 +3,7 @@
 @model CompanyViewModel;
 
 @{
-	ViewData["Title"] = "Edit company";
+	ViewData["Title"] = "Create company";
 }
 
 
@@ -11,5 +11,5 @@
 
 @await Html.PartialAsync("_CompanyForm", Model, new ViewDataDictionary(ViewData)
 {
-	{"Controller", "Company"}, {"Action", "Edit"}, {"ButtonName", "Save"}
+	{"Controller", "Company"}, {"Action", "Create"}, {"ButtonName", "Create"}
 })

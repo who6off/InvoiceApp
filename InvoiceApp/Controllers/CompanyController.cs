@@ -1,108 +1,133 @@
-﻿using InvoiceApp.Data.RequestParameters;
+﻿using InvoiceApp.Data.Models;
+using InvoiceApp.Data.RequestParameters;
+using InvoiceApp.Helpers.Exceptions;
 using InvoiceApp.Services.Interfaces;
 using InvoiceApp.ViewModels.Company;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvoiceApp.Controllers
 {
-    public class CompanyController : Controller
-    {
-        private readonly ICompanyService _companyServce;
+	public class CompanyController : Controller
+	{
+		private readonly ICompanyService _companyServce;
 
 
-        public CompanyController(ICompanyService companyService)
-        {
-            _companyServce = companyService;
-        }
+		public CompanyController(ICompanyService companyService)
+		{
+			_companyServce = companyService;
+		}
 
 
-        [HttpGet]
-        public async Task<IActionResult> Index([FromQuery] CompanyRequestParameters parameters)
-        {
-            var companies = await _companyServce.Get(parameters);
-            return View(new IndexViewModel()
-            {
-                Parameters = parameters,
-                Companies = companies
-            });
-        }
+		[HttpGet]
+		public async Task<IActionResult> Index([FromQuery] CompanyRequestParameters parameters)
+		{
+			var companies = await _companyServce.Get(parameters);
+			return View(new IndexViewModel()
+			{
+				Parameters = parameters,
+				Companies = companies
+			});
+		}
 
 
-        //[HttpPost]
-        //public async Task<IActionResult> Create(IndexViewModel viewModel)
-        //{
-        //    if (!ModelState.IsValid)
-        //        return await GetCreateCompanyErrorResult(viewModel);
-
-        //    try
-        //    {
-        //        var company = await _companyServce.Create(viewModel.NewCompanyName);
-        //    }
-        //    catch (ModelValidationException e)
-        //    {
-        //        ModelState.AddModelError(nameof(viewModel.NewCompanyName), e.Message);
-        //        return await GetCreateCompanyErrorResult(viewModel);
-        //    }
-
-        //    return RedirectToAction(nameof(Index));
-        //}
+		[HttpGet]
+		public async Task<IActionResult> Create()
+		{
+			return View(new CompanyViewModel());
+		}
 
 
-        //[HttpGet]
-        //public async Task<IActionResult> Edit(int id)
-        //{
-        //    var company = await _companyServce.GetById(id);
-        //    if (company is null)
-        //    {
-        //        throw new NotFoundException("Company is not found.");
-        //    }
+		[HttpPost]
+		public async Task<IActionResult> Create(CompanyViewModel viewModel)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(viewModel);
+			}
 
-        //    return View(company);
-        //}
+			Company? company;
 
-        //[HttpPost]
-        //public async Task<IActionResult> Edit(Company company)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(company);
-        //    }
+			try
+			{
+				company = await _companyServce.Create(viewModel);
+			}
+			catch (ModelValidationException e)
+			{
+				ModelState.AddModelError(e.Propery, e.Message);
+				return View(viewModel);
+			}
 
-        //    var updatedCompany = await _companyServce.Update(company);
+			if (company is null)
+			{
+				throw new AppException("Company is not created!");
+			}
 
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-
-        //[HttpGet]
-        //public async Task<IActionResult> Delete(int id)
-        //{
-        //    var isDeleted = await _companyServce.Delete(id);
-
-        //    return RedirectToAction(nameof(Index));
-        //}
+			return RedirectToAction(nameof(Info), new { id = company.Id });
+		}
 
 
-        //[HttpGet]
-        //public async Task<IActionResult> Info(int id)
-        //{
-        //    var company = await _companyServce.GetById(id);
-        //    if (company is null)
-        //    {
-        //        throw new NotFoundException("Company is not found.");
-        //    }
+		[HttpGet]
+		public async Task<IActionResult> Edit(int id)
+		{
+			var company = await _companyServce.GetById(id);
+			if (company is null)
+			{
+				throw new NotFoundException("Company is not found.");
+			}
 
-        //    return View(new CompanyInfoViewModel()
-        //    {
-        //        Company = company
-        //    });
-        //}
+			return View(new CompanyViewModel()
+			{
+				Id = company.Id,
+				Name = company.Name,
+			});
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Edit(CompanyViewModel viewModel)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(viewModel);
+			}
+
+			Company? updatedCompany;
+
+			try
+			{
+				updatedCompany = await _companyServce.Update(viewModel);
+			}
+			catch (ModelValidationException e)
+			{
+				ModelState.AddModelError(e.Propery, e.Message);
+				return View(viewModel);
+			}
+
+			return RedirectToAction(nameof(Info), new { id = updatedCompany.Id });
+		}
 
 
-        //private async Task<IActionResult> GetCreateCompanyErrorResult(IndexViewModel viewModel)
-        //{
-        //    viewModel.Companies = await _companyServce.GetAll();
-        //    return View("Index", viewModel);
-        //}
-    }
+		//[HttpGet]
+		//public async Task<IActionResult> Delete(int id)
+		//{
+		//    var isDeleted = await _companyServce.Delete(id);
+
+		//    return RedirectToAction(nameof(Index));
+		//}
+
+
+		[HttpGet]
+		public async Task<IActionResult> Info(int id)
+		{
+			var company = await _companyServce.GetById(id);
+			if (company is null)
+			{
+				throw new NotFoundException("Company is not found.");
+			}
+
+			return View(new CompanyInfoViewModel()
+			{
+				Company = company
+			});
+		}
+	}
 }

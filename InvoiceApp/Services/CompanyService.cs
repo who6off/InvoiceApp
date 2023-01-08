@@ -4,6 +4,7 @@ using InvoiceApp.Data.RequestParameters;
 using InvoiceApp.Helpers;
 using InvoiceApp.Helpers.Exceptions;
 using InvoiceApp.Services.Interfaces;
+using InvoiceApp.ViewModels.Company;
 
 namespace InvoiceApp.Services
 {
@@ -24,6 +25,12 @@ namespace InvoiceApp.Services
 		}
 
 
+		public Task<Company?> GetByName(string name)
+		{
+			return _repository.GetByName(name);
+		}
+
+
 		public Task<List<Company>> GetAll()
 		{
 			return _repository.GetAll();
@@ -36,25 +43,43 @@ namespace InvoiceApp.Services
 		}
 
 
-		public async Task<Company?> Create(string name)
+		public async Task<Company?> Create(CompanyViewModel viewModel)
 		{
-			var company = await _repository.Create(new Company() { Name = name });
-			if (company is null)
-				throw new ModelValidationException(nameof(company.Name), "Incorrect name!");
+			await ValidateName(viewModel.Name);
 
-			return company;
+			var newCompany = await _repository.Create(new Company() { Name = viewModel.Name });
+
+			return newCompany;
 		}
 
 
-		public Task<Company?> Update(Company company)
+		public async Task<Company?> Update(CompanyViewModel viewModel)
 		{
-			return _repository.Update(company);
+			await ValidateName(viewModel.Name);
+
+			return await _repository.Update(new Company()
+			{
+				Id = viewModel.Id.Value,
+				Name = viewModel.Name
+			});
 		}
 
 
 		public Task<bool> Delete(int id)
 		{
 			return _repository.Delete(id);
+		}
+
+
+		private async Task<Company> ValidateName(string name)
+		{
+			var company = await GetByName(name);
+			if (company is not null)
+			{
+				throw new ModelValidationException(nameof(company.Name), "Name is already taken!");
+			}
+
+			return company;
 		}
 
 	}

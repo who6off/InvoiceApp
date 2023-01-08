@@ -80,14 +80,14 @@ namespace InvoiceApp.Data.Repositories
 	                [Companies]
                 WHERE
                     [Companies].[Id] IS NOT NULL
-	                {(string.IsNullOrEmpty(parameters.Name) ? "" : "AND [Companies].[Name]=@Name")};
+	                {(string.IsNullOrEmpty(parameters.Name) ? "" : "AND [Companies].[Name] LIKE @Name")};
 				
                 SELECT
 	                * 
                 FROM
 	                #TempData
                 ORDER BY 
-	                #TempData.[LastUpdateDate] DESC
+	                #TempData.[Id] DESC
                 OFFSET @Skip ROWS 
                 FETCH NEXT @Take ROWS ONLY;
 
@@ -101,7 +101,7 @@ namespace InvoiceApp.Data.Repositories
             {
                 using (var multi = await connection.QueryMultipleAsync(query, new
                 {
-                    Name = parameters.Name,
+                    Name = parameters.Name + "%",
                     Skip = (int)parameters.Page * parameters.PageSize,
                     Take = (int)parameters.PageSize
                 }))
@@ -163,7 +163,7 @@ namespace InvoiceApp.Data.Repositories
                     Name = company.Name
                 });
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return null;
             }

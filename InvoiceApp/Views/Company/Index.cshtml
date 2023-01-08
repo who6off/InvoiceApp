@@ -19,7 +19,7 @@
             <label class="form-label">Name:</label>
         </div>
         <div class="col-10 p-0">
-            <input type="text" value="" class="form-control"/>
+            <input asp-for="@Model.Parameters.Name" type="text" value="@Model.Parameters.Name" class="form-control"/>
         </div>
     </div>
 
@@ -30,8 +30,11 @@
     </div>
 </form>
 
+<div class="my-2">
+	<a asp-controller="Company" asp-action="Create" class="btn btn-primary">Create</a>
+</div>
 
-<div class="table-wrapper">
+<div class="table-wrapper mb-2">
     <table class="table fs-6">
         <thead>
             <tr>
