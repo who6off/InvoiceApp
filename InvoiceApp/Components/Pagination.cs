@@ -7,8 +7,6 @@ namespace InvoiceApp.Components
     {
         public IViewComponentResult Invoke(PaginationViewModel viewModel)
         {
-            viewModel.Parameters.Page = 0;
-
             return View(viewModel);
         }
     }

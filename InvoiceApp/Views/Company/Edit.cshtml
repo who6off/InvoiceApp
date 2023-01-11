@@ -1,15 +1,23 @@
-﻿@using InvoiceApp.ViewModels.Company;
+﻿@using InvoiceApp.Helpers;
+@using InvoiceApp.ViewModels.Company;
 
 @model CompanyViewModel;
 
 @{
 	ViewData["Title"] = "Edit company";
+	var returnUrl = Context.Request.Query.GetByKey("returnUrl", Url.Action("List", "Invoice"));
 }
 
 
-<h2>Create new company</h2>
+<h2>Create company</h2>
+<hr class="mb-3"/>
 
 @await Html.PartialAsync("_CompanyForm", Model, new ViewDataDictionary(ViewData)
 {
-	{"Controller", "Company"}, {"Action", "Edit"}, {"ButtonName", "Save"}
+	{"Controller", "Company"}, {"Action", "Edit"}, {"ButtonName", "Save"}, {"returnUrl", returnUrl}
 })
+
+
+<div class="container my-3">
+	<a href="javascript: history.go(-1)" class="link link-primary">Back</a>
+</div>

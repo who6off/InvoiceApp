@@ -1,4 +1,5 @@
-﻿@using InvoiceApp.Services.Interfaces;
+﻿@using InvoiceApp.Helpers;
+@using InvoiceApp.Services.Interfaces;
 @using InvoiceApp.ViewModels.Invoice;
 
 @inject ICompanyService _companyService;
@@ -7,10 +8,16 @@
 
 @{
 	ViewData["Title"] = "Invoice edit";
+	var returnUrl = Context.Request.Query.GetByKey("returnUrl", Url.Action("List", "Invoice"));
 }
 
-<h2>Create Invoice</h2>
+<h2>Edit invoice</h2>
+<hr class="mb-3" />
 
 @await Html.PartialAsync("_InvoiceForm", Model, new ViewDataDictionary(ViewData){
-	{"Controller", "Invoice"}, {"Action", "Edit"}, {"ButtonName", "Save"}
+	{"Controller", "Invoice"}, {"Action", "Edit"}, {"ButtonName", "Save"}, {"returnUrl", returnUrl}
 })
+
+<div class="container my-3">
+	<a href="javascript: history.go(-1)" class="link link-primary">Back</a>
+</div>

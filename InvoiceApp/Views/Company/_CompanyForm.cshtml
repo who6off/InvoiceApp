@@ -3,6 +3,7 @@
 @model CompanyViewModel;
 
 @{
+	var returnUrl = (string?)ViewData["returnUrl"];
 }
 
 <form asp-controller="@ViewData["Controller"]"
@@ -25,4 +26,9 @@
 			<input type="submit" value="@ViewData["ButtonName"]" class="btn btn-primary" />
 		</div>
 	</div>
+
+	@if(!string.IsNullOrEmpty(returnUrl))
+	{
+		<input name="returnUrl" type="hidden" value="@returnUrl" />
+	}
 </form>

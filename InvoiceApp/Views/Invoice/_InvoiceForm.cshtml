@@ -8,6 +8,7 @@
 @{
 	var dateString = Model.Month.ToString("yyyy-MM");
 	var companies = (await _companyService.GetAll()).Select(i => i.Name).ToArray();
+	var returnUrl = (string?)ViewData["returnUrl"];
 }
 
 <form asp-controller="@ViewData["Controller"]"
@@ -50,6 +51,11 @@
 			<input type="submit" value="@ViewData["ButtonName"]" class="btn btn-primary" />
 		</div>
 	</div>
+
+	@if(!string.IsNullOrEmpty(returnUrl))
+	{
+		<input name="returnUrl" type="hidden" value="@returnUrl" />
+	}
 </form>
 
 
@@ -57,7 +63,7 @@
 	document.addEventListener('DOMContentLoaded', () => {
 		const companies = @Json.Serialize(companies);
 
-		var companyInput = new autoComplete({
+		const companyInput = new autoComplete({
 			selector: '#company-input',
 			placeHolder: 'Company name...',
 			data: {

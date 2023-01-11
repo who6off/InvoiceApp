@@ -12,6 +12,8 @@ namespace InvoiceApp.Services.Interfaces
 
         public Task<Invoice?> GetById(int id);
 
+        public Task<Invoice?> GetByIdWithUserData(int id);
+
         public Task<Invoice?> Create(InvoiceViewModel model);
 
         public Task<Invoice?> Update(InvoiceViewModel model);

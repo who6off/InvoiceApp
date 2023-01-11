@@ -4,6 +4,7 @@
 @using InvoiceApp.ViewModels.Components;
 @using InvoiceApp.ViewModels.Invoice;
 @using System.Globalization;
+@using Microsoft.AspNetCore.Http.Extensions;
 
 @inject ICompanyService _companyService;
 
@@ -11,6 +12,7 @@
 
 @{
     ViewData["Title"] = "Invoices";
+    var returnUrl = Context.Request.GetDisplayUrl();
     var (Invoices, Parameters) = (Model.Invoices, Model.Parameters);
     var companies = (await _companyService.GetAll())
         .Select(i => i.Name)
@@ -71,7 +73,7 @@
 
 
 
-<div class="table-wrapper">
+<div class="table-wrapper my-3">
 <table class="table fs-6">
     <thead>
         <tr>
@@ -94,6 +96,11 @@
                     InvoiceStatuses.Submitted => "text-primary",
                     _ => ""
             };
+            var editHreh = Url.Action("Edit", "Invoice", new
+            {
+                id = item.Id,
+                returnUrl = Url.Action("Details", "Invoice", new { id = item.Id, returnUrl = returnUrl})
+            });
 
             <tr>
                 <td>@item.Id</td>
@@ -103,8 +110,8 @@
                 <td class="@statusClass">@item.Status</td>
                 <td>@item.LastUpdateDate.ToDateWithTimeString()</td>
                 <td>
-                        <a asp-controller="Invoice" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detais</a>
-                        <a asp-controller="Invoice" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-controller="Invoice" asp-action="Details" asp-route-id="@item.Id" asp-route-returnUrl="@returnUrl" class="btn btn-sm btn-info">Detais</a>
+                        <a href="@editHreh" class="btn btn-sm btn-warning">Edit</a>
                         <button data-modal="@deletionModalId" data-id="@item.Id"
                             data-ondelete="this.closest('tr').remove()"
                             class ="btn btn-sm btn-danger"

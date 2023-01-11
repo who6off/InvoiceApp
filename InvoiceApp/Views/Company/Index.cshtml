@@ -1,13 +1,14 @@
 ﻿@using InvoiceApp.ViewModels.Company;
 @using InvoiceApp.ViewModels.Components;
+@using Microsoft.AspNetCore.Http.Extensions;
 
 @model IndexViewModel; 
 
 @{
     ViewData["Title"] = "Companies";
+    var deletionModalId = "deletion-modal";
+    var returnUrl = Context.Request.GetDisplayUrl();
 }
-
-<h2>Companies</h2>
 
 <form asp-controller="Company"
       asp-action="Index"
@@ -31,7 +32,7 @@
 </form>
 
 <div class="my-2">
-	<a asp-controller="Company" asp-action="Create" class="btn btn-primary">Create</a>
+    <a asp-controller="Company" asp-action="Create" asp-route-returnUrl="@returnUrl" class="btn btn-primary">Create</a>
 </div>
 
 <div class="table-wrapper mb-2">
@@ -48,13 +49,25 @@
             {
                 foreach (var item in Model.Companies)
                 {
+                    var editHref = Url.Action("Edit", "Company", new
+                    {
+                        id = item.Id,
+                        returnUrl = Url.Action("Details", "Company", new{id = item.Id, returnUrl = returnUrl})
+                    });
+
                     <tr>
                         <td>@item.Id</td>
                         <td>@item.Name</td>
                         <td>
-                            <a asp-controller="Company" asp-action="Info" asp-route-id="@item.Id" class="btn btn-sm btn-info">Info</a>
-                            <a asp-controller="Company" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
-                            <a asp-controller="Company" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                            <a asp-controller="Company" asp-action="Details" asp-route-id="@item.Id" asp-route-returnUrl="@returnUrl" class="btn btn-sm btn-info">Info</a>
+                            <a href="@editHref" class="btn btn-sm btn-warning">Edit</a>
+                            <button 
+                                data-modal="@deletionModalId" data-id="@item.Id"
+                                data-ondelete="this.closest('tr').remove()"
+                                class ="btn btn-sm btn-danger"
+                            >
+                                Delete
+                            </button>
                         </td>
                     </tr>
                 }
@@ -72,3 +85,9 @@
     Parameters = Model.Parameters
 })
 
+@await Component.InvokeAsync("DeletionModal", new DeletionModalViewModel()
+{
+    ModalId = deletionModalId,
+    Message = "Are you sure?",
+    ActionUrl = Url.Action("Delete", "Company")
+})

@@ -1,48 +1,104 @@
 ﻿@using InvoiceApp.Data.Models;
 @using System.Text.Json;
+@using InvoiceApp.Helpers;
 @using InvoiceApp.Identity.Constants;
 @using InvoiceApp.Identity.Helpers;
+@using Microsoft.AspNetCore.Http.Extensions;
+@using Microsoft.Extensions.Primitives;
 
 @model Invoice
 
 @{
 	ViewData["Title"] = "Invoice details";
+	var returnUrl = Context.Request.Query.GetByKey("returnUrl", Url.Action("List", "Invoice"));
+	var currentUrl = Context.Request.GetDisplayUrl();
+	var statusClass = Model.Status switch
+	{
+		InvoiceStatuses.Rejected => "text-danger",
+		InvoiceStatuses.Approved => "text-success",
+		InvoiceStatuses.Submitted => "text-primary",
+		_ => ""
+	};
+
 	var isAccountant = User.GetRole() == UserRoles.Accountant;
 }
 
+<h2>Invoice details</h2>
+<hr class="mb-3" />
 
-<pre>@JsonSerializer.Serialize(Model, new JsonSerializerOptions() { WriteIndented = true })</pre>
-
-
-@if(!isAccountant)
-{
-	<div class="container">
-		@if(Model.Status != InvoiceStatuses.Approved)
-		{
-			<form
-				asp-controller="Invoice"
-				asp-action="ChangeStatus"
-				method="post"
-				class="d-inline-block"
-			>
-				<input type="hidden" name="id" value="@Model.Id" />
-				<input type="hidden" name="status" value="@InvoiceStatuses.Approved" />
-				<input type="submit" value="Approve" class="btn btn-success" />
-			</form>
-		}
-
-		@if (Model.Status != InvoiceStatuses.Rejected)
-		{
-			<form 
-				asp-controller="Invoice"
-				asp-action="ChangeStatus"
-				method="post"
-				class="d-inline-block"
-			>
-				<input type="hidden" name="id" value="@Model.Id" />
-				<input type="hidden" name="status" value="@InvoiceStatuses.Rejected" />
-				<input type="submit" value="Reject" class="btn btn-danger" />
-			</form>
-		}
+<div class="container">
+	<div class="row">
+		<div class="col-2 fw-bold">Document Id</div>
+		<div class="col-10">@Model.Id</div>
 	</div>
-}
+	<div class="row">
+		<div class="col-2 fw-bold">Owner</div>
+		<div class="col-10">@Model.Owner?.Name</div>
+	</div>
+	<div class="row">
+		<div class="col-2 fw-bold">Amount</div>
+		<div class="col-10">@Model.Amount.ToSeparationString()</div>
+	</div>
+	<div class="row">
+		<div class="col-2 fw-bold">Month</div>
+		<div class="col-10 ">@Model.Month.ToMonthString()</div>
+	</div>
+	<div class="row">
+		<div class="col-2 fw-bold">Status</div>
+		<div class="col-10 @statusClass">@Model.Status</div>
+	</div>
+	<div class="row">
+		<div class="col-2 fw-bold">Creation date</div>
+		<div class="col-10">@Model.CreationDate.ToDateWithTimeString()</div>
+	</div>
+	<div class="row">
+		<div class="col-2 fw-bold">Creator</div>
+		<div class="col-10">@Model.Creator?.Name @Model.Creator?.Surname</div>
+	</div>
+	<div class="row">
+		<div class="col-2 fw-bold">Last update action</div>
+		<div class="col-10">@Model.LastUpdateAction</div>
+	</div>
+	<div class="row">
+		<div class="col-2 fw-bold">Last update date</div>
+		<div class="col-10">@Model.LastUpdateDate.ToDateWithTimeString()</div>
+	</div>
+	<div class="row">
+		<div class="col-2 fw-bold">Lats update author</div>
+		<div class="col-10">@Model.LastUpdateAuthor?.Name @Model.LastUpdateAuthor?.Surname</div>
+	</div>
+	<div class="row">
+		<a asp-action="Edit" asp-controller="Invoice" asp-route-id="@Model.Id" asp-route-returnUrl="@currentUrl" class="link link-primary">Edit</a>
+	</div>
+
+	@if (!isAccountant)
+	{
+		<div class="d-flex justify-content-start gap-2 my-3">
+			@if (Model.Status != InvoiceStatuses.Approved)
+			{
+				var href = Url.Action("ChangeStatus", "Invoice", new
+				{
+					id = Model.Id,
+					status = InvoiceStatuses.Approved,
+					returnUrl = returnUrl
+				});
+				<a href="@href"class="btn btn-success">Approve</a>
+			}
+
+			@if (Model.Status != InvoiceStatuses.Rejected)
+			{
+				var href = Url.Action("ChangeStatus", "Invoice", new
+				{
+					id = Model.Id,
+					status = InvoiceStatuses.Rejected,
+					returnUrl = returnUrl
+				});
+				<a href="@href" class="btn btn-danger">Reject</a>
+			}
+		</div>
+	}
+</div>
+
+<div class="container">
+	<a href="@returnUrl" class="link link-primary">Back</a>
+</div>

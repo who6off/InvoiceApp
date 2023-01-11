@@ -5,9 +5,11 @@
 
 @{
     var buttonClass = "btn btn-primary d-flex justify-content-center align-items-center p-2";
-    var disabledButtonClass = "btn btn-primary d-flex justify-content-center align-items-center p-2 disabled";
+    var disabledButtonClass = buttonClass + " disabled";
     string firstButtonClass = "", lastButtonClass = "", previousButtonClass = "", nextButtonClass = "";
     string firstButtonUrl = "", lastButtonUrl = "", previousButtonUrl = "", nextButtonUrl = "";
+    
+    var refreshButtonUrl =  Url.Action(Model.ActionName, Model.ControllerName, Model.Parameters);
 
     if (Model.Data.HasPrevious)
     {
@@ -89,6 +91,13 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z" />
             <path fill-rule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z" />
+        </svg>
+    </a>
+
+    <a class="@buttonClass" href="@refreshButtonUrl">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z" />
+            <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z" />
         </svg>
     </a>
 </div>

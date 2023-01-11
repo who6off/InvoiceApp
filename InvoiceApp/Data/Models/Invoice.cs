@@ -1,4 +1,5 @@
 ﻿using InvoiceApp.Data.DbViews;
+using InvoiceApp.Identity.Models;
 
 namespace InvoiceApp.Data.Models
 {
@@ -28,6 +29,7 @@ namespace InvoiceApp.Data.Models
 
         public DateTime Month { get; set; }
 
+        public AppUser? Creator { get; set; }
         public string? CreatorId { get; set; }
 
         public DateTime CreationDate { get; set; }
@@ -38,6 +40,7 @@ namespace InvoiceApp.Data.Models
 
         public DateTime LastUpdateDate { get; set; }
 
+        public AppUser? LastUpdateAuthor { get; set; }
         public string? LastUpdateAuthorId { get; set; }
 
         public Invoice() { }

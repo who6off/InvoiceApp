@@ -1,0 +1,28 @@
+﻿@using InvoiceApp.Helpers;
+@using InvoiceApp.ViewModels.Company;
+@using Microsoft.AspNetCore.Http.Extensions;
+@model CompanyInfoViewModel
+
+@{
+	ViewData["Title"] = "Company details";
+	var returnUrl = Context.Request.Query.GetByKey("returnUrl", Url.Action("Index", "Company"));
+	var currentUrl = Context.Request.GetDisplayUrl();
+}
+
+<h2>Company details</h2>
+<hr class="mb-3" />
+
+<div class="container">
+	<div class="row">
+		<div class="col-2 fw-bold">Name</div>
+		<div class="col-10">@Model.Company.Name</div>
+	</div>
+</div>
+
+<div class="container">
+	<a asp-action="Edit" asp-controller="Company" asp-route-id="@Model.Company.Id" asp-route-returnUrl="@currentUrl" class="link link-primary">Edit</a>
+</div>
+
+<div class="container my-3">
+	<a href="@returnUrl" class="link link-primary">Back</a>
+</div>

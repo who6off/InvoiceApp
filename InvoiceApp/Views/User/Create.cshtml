@@ -2,9 +2,14 @@
 @model UserViewModel;
 
 
-<h2>Create new user</h2>
+<h2>Registration</h2>
+<hr class="mb-3" />
 
 @await Html.PartialAsync("_UserForm", Model, new ViewDataDictionary(ViewData)
 {
 	{"Controller", "User"}, {"Action", "Create"}, {"ButtonName", "Create"}
 })
+
+<div class="container my-3">
+	<a href="javascript: history.go(-1)" class="link link-primary">Back</a>
+</div>
