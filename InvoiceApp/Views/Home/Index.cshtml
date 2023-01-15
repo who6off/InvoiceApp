@@ -1,8 +1,13 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    var isAuthenticated = Context.User?.Identity?.IsAuthenticated;
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    @if ((isAuthenticated is null) || !isAuthenticated.Value)
+    {
+        <p>To use the application please <a asp-controller="User" asp-action="SignIn" class="link link-primary">sign in</a>.</p>
+    }
 </div>

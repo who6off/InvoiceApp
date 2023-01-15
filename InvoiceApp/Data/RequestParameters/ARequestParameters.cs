@@ -29,9 +29,9 @@ namespace InvoiceApp.Data.RequestParameters
 
         public Task<ARequestParameters> Clone() => Task.Run(() =>
         {
-            var json = JsonSerializer.Serialize(this);
-            var obj = JsonSerializer.Deserialize<ARequestParameters>(json);
-            return obj;
+            var json = JsonSerializer.Serialize(this, this.GetType());
+            var obj = JsonSerializer.Deserialize(json, this.GetType());
+            return (ARequestParameters)obj;
         });
     };
 }
