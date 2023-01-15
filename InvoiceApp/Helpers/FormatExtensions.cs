@@ -17,6 +17,10 @@ namespace InvoiceApp.Helpers
 			return date.ToString("MMM yyyy", _cultureInfo);
 		}
 
+		public static string ToDayMonthString(this DateTime date)
+		{
+			return date.ToString("dd MMM yyyy", _cultureInfo);
+		}
 
 		public static string ToDateWithTimeString(this DateTime date)
 		{

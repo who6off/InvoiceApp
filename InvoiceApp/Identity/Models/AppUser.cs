@@ -17,7 +17,7 @@ namespace InvoiceApp.Identity.Models
 
 		[Required]
 		[Column(TypeName = "date")]
-		public DateTime DateObBirth { get; set; }
+		public DateTime DateOfBirth { get; set; }
 
 		public string? RoleName { get => UserRoles.FirstOrDefault()?.Role.Name; }
 

@@ -1,0 +1,55 @@
+﻿@using InvoiceApp.Helpers;
+@using InvoiceApp.ViewModels.User;
+
+@model UserDetailsViewModel;
+
+@{
+	ViewData["Title"] = "User info";
+	var (header, user, userVM) = (Model.Header, Model.AppUser, Model.UserViewModel);
+	var returnUrl = string.IsNullOrEmpty(Model.ReturnUrl)
+		? Context.Request.Query.GetByKey("returnUrl", Url.Action("List", "User"))
+		: Model.ReturnUrl;
+}
+
+<h2>@header</h2>
+<hr class="mb-3" />
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm-2 col-12 fw-bold">Name</div>
+		<div class="col-sm-10 col-12">@user.Name</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-2 col-12 fw-bold">Surname</div>
+		<div class="col-sm-10 col-12">@user.Surname</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-2 col-12 fw-bold">Date of birth</div>
+		<div class="col-sm-10 col-12">@user.DateOfBirth.ToDayMonthString()</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-2 col-12 fw-bold">Role</div>
+		<div class="col-sm-10 col-12">@user.RoleName</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-2 col-12 fw-bold">Email</div>
+		<div class="col-sm-10 col-12">@user.Email</div>
+	</div>
+	@if ((userVM is not null) && !string.IsNullOrEmpty(userVM.Password))
+	{
+		<div class="row">
+			<div class="col-sm-2 col-12 fw-bold text-danger">Password</div>
+			<div class="col-sm-10 col-12 text-danger">@userVM.Password</div>
+		</div>
+	}
+	<div class="row">
+		<a asp-controller="User" asp-action="Edit" asp-route-id="@user.Id" asp-route-returnUrl="@returnUrl" class="link link-primary">Edit</a>
+	</div>
+</div>
+
+<div class="container my-3">
+	<a href="@returnUrl" class="link link-primary">Back</a>
+</div>
+
+
+

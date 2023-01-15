@@ -102,7 +102,7 @@ namespace InvoiceApp.Identity.Services
             {
                 Name = model.Name.FirstCharToUpper(),
                 Surname = model.Surname.FirstCharToUpper(),
-                DateObBirth = model.DateOfBirth,
+                DateOfBirth = model.DateOfBirth,
                 Email = model.Email,
                 UserName = model.Email.ToLower(),
             };
@@ -128,7 +128,7 @@ namespace InvoiceApp.Identity.Services
 
             user.Name = model.Name.FirstCharToUpper();
             user.Surname = model.Surname.FirstCharToUpper();
-            user.DateObBirth = model.DateOfBirth;
+            user.DateOfBirth = model.DateOfBirth;
             user.Email = model.Email;
             user.UserName = model.Email.ToLower();
 

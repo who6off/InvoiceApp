@@ -1,10 +1,20 @@
-﻿@using InvoiceApp.Identity.ViewModels;
+﻿@using InvoiceApp.Helpers;
+@using InvoiceApp.Identity.ViewModels;
 @model UserViewModel;
 
+@{
+	ViewData["Title"] = "Edit user";
+	var returnUrl = Context.Request.Query.GetByKey("returnUrl", Url.Action("List", "User"));
+}
 
-<h2>Edit user information</h2>
+<h2>Edit user`s information</h2>
+<hr class="mb-3" />
 
 @await Html.PartialAsync("_UserForm", Model, new ViewDataDictionary(ViewData)
 {
-	{"Controller", "User"}, {"Action", "Edit_Post"}, {"ButtonName", "Save"}
+	{"Controller", "User"}, {"Action", "Edit_Post"}, {"ButtonName", "Save"}, {"returnUrl", returnUrl}
 })
+
+<div class="container my-3">
+	<a href="javascript: history.go(-1)" class="link link-primary">Back</a>
+</div>

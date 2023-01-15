@@ -1,6 +1,8 @@
-﻿namespace InvoiceApp.Data.RequestParameters
+﻿using System.Text.Json;
+
+namespace InvoiceApp.Data.RequestParameters
 {
-    public abstract class ARequestParameters
+    public class ARequestParameters
     {
         private const uint MAX_PAGE_SIZE = 50;
 
@@ -15,6 +17,7 @@
         }
 
 
+
         public ARequestParameters() { }
 
 
@@ -24,14 +27,11 @@
         }
 
 
-        public Dictionary<string, string> ToDictionary()
+        public Task<ARequestParameters> Clone() => Task.Run(() =>
         {
-            var dictionary = this.GetType()
-                .GetProperties()
-                .Where(property => property.GetValue(this) is not null)
-                .ToDictionary(property => property.Name, property => property.GetValue(this)?.ToString());
-
-            return dictionary;
-        }
+            var json = JsonSerializer.Serialize(this);
+            var obj = JsonSerializer.Deserialize<ARequestParameters>(json);
+            return obj;
+        });
     };
 }

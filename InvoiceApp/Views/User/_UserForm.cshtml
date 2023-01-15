@@ -4,6 +4,7 @@
 @{
 	var roleSelectList = new SelectList(UserRoles.GetAll());
 	var date = Model.DateOfBirth.ToString("yyyy-MM-dd");
+	var returnUrl = (string?)ViewData["returnUrl"];
 }
 
 <form 
@@ -88,6 +89,11 @@
 			<input type="submit" value="@ViewData["ButtonName"]" class="btn btn-primary" />
 		</div>
 	</div>
+
+	@if(!string.IsNullOrEmpty(returnUrl))
+	{
+		<input name="returnUrl" value="@returnUrl" type="hidden" />
+	}
 </form>
 
 

@@ -1,13 +1,18 @@
-﻿@using InvoiceApp.Identity.ViewModels;
+﻿@using InvoiceApp.Helpers;
+@using InvoiceApp.Identity.ViewModels;
 @model UserViewModel;
 
+@{
+	ViewData["Title"] = "Registration";
+	var returnUrl = Context.Request.Query.GetByKey("returnUrl", Url.Action("Create", "User"));
+}
 
 <h2>Registration</h2>
 <hr class="mb-3" />
 
 @await Html.PartialAsync("_UserForm", Model, new ViewDataDictionary(ViewData)
 {
-	{"Controller", "User"}, {"Action", "Create"}, {"ButtonName", "Create"}
+	{"Controller", "User"}, {"Action", "Create"}, {"ButtonName", "Create"}, {"returnUrl", returnUrl}
 })
 
 <div class="container my-3">

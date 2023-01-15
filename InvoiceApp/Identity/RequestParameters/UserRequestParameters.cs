@@ -10,6 +10,7 @@ namespace InvoiceApp.Identity.RequestParameters
 
         public string? Email { get; set; }
 
+
         public UserRequestParameters() { }
 
         public UserRequestParameters(

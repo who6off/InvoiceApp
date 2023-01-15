@@ -5,8 +5,9 @@ namespace InvoiceApp.Components
 {
     public class Pagination : ViewComponent
     {
-        public IViewComponentResult Invoke(PaginationViewModel viewModel)
+        public async Task<IViewComponentResult> InvokeAsync(PaginationViewModel viewModel)
         {
+            viewModel.Parameters = await viewModel.Parameters.Clone();
             return View(viewModel);
         }
     }
