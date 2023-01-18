@@ -38,7 +38,7 @@ namespace InvoiceApp.Data.Repositories
         }
 
 
-        public async Task<PagedList<Invoice>> Get(InvoiceRequestParemeters parameters)
+        public async Task<PagedList<Invoice>> Get(InvoiceRequestParameters parameters)
         {
             using var connection = CreateConnection();
             var query = $@"

@@ -25,3 +25,17 @@ html {
 body {
     margin-bottom: 60px;
 }
+
+.print {
+    display: none !important;
+}
+
+@media print {
+    .print {
+        display: block !important;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+}

@@ -20,6 +20,7 @@ namespace InvoiceApp.Middleware
             {
                 await _next(httpContext);
             }
+
             catch (AppException e)
             {
                 HandleException(e, httpContext);

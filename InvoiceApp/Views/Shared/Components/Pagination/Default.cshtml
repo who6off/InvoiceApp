@@ -1,6 +1,8 @@
 ﻿@using InvoiceApp.Components;
 @using InvoiceApp.Data.RequestParameters;
 @using InvoiceApp.ViewModels.Components;
+@using InvoiceApp.Helpers;
+@using System.Web;
 
 @model PaginationViewModel
 
@@ -9,18 +11,21 @@
     var disabledButtonClass = buttonClass + " disabled";
     string firstButtonClass = "", lastButtonClass = "", previousButtonClass = "", nextButtonClass = "";
     string firstButtonUrl = "", lastButtonUrl = "", previousButtonUrl = "", nextButtonUrl = "";
-    
-    var refreshButtonUrl =  Url.Action(Model.ActionName, Model.ControllerName, Model.Parameters);
+
+    var returnUrl = Context.Request.Query.GetByKey("returnUrl");
+    var returnUrlParam = (returnUrl is null) ? "" : $"&returnUrl={HttpUtility.UrlPathEncode(returnUrl)}";
+
+    var refreshButtonUrl = Url.Action(Model.ActionName, Model.ControllerName, Model.Parameters) + returnUrlParam;
 
     if (Model.Data.HasPrevious)
     {
         firstButtonClass = previousButtonClass =  buttonClass;
 
         Model.Parameters.Page = 0;
-        firstButtonUrl = Url.Action(Model.ActionName, Model.ControllerName, Model.Parameters);
+        firstButtonUrl = Url.Action(Model.ActionName, Model.ControllerName, Model.Parameters) + returnUrlParam;
 
         Model.Parameters.Page = Model.Data.CurrentPage - 1;
-        previousButtonUrl = Url.Action(Model.ActionName, Model.ControllerName, Model.Parameters);
+        previousButtonUrl = Url.Action(Model.ActionName, Model.ControllerName, Model.Parameters) + returnUrlParam;
     }
     else
     {
@@ -32,10 +37,10 @@
         lastButtonClass = nextButtonClass = buttonClass;
 
         Model.Parameters.Page = Model.Data.PageCount - 1;
-        lastButtonUrl = Url.Action(Model.ActionName, Model.ControllerName, Model.Parameters);
+        lastButtonUrl = Url.Action(Model.ActionName, Model.ControllerName, Model.Parameters) + returnUrlParam;
 
         Model.Parameters.Page = Model.Data.CurrentPage + 1;
-        nextButtonUrl = Url.Action(Model.ActionName, Model.ControllerName, Model.Parameters);
+        nextButtonUrl = Url.Action(Model.ActionName, Model.ControllerName, Model.Parameters) + returnUrlParam;
     }
     else
     {
@@ -59,7 +64,7 @@
                 };
 
                 Model.Parameters.Page = (uint)i;
-                var path = Url.Action(Model.ActionName, Model.ControllerName, Model.Parameters);
+                var path = Url.Action(Model.ActionName, Model.ControllerName, Model.Parameters) + returnUrlParam;
 
                 <option data-path="@path">@pageNumber</option>
             }

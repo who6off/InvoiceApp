@@ -7,10 +7,15 @@ drawChart('#chart');
 
 function drawChart(selector) {
     const statistics = Model.statistics;
-
-    if (!statistics || !statistics.length) return;
-
     const ctx = document.querySelector(selector);
+
+    if (!statistics || !statistics.length) {
+        ctx.parentNode.style.display = 'none';
+        return;
+    }
+
+    ctx.parentNode.style.display = 'block';
+
     let chart;
     const labels = statistics[0].months.map(i => i.month)
 

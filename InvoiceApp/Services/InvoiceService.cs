@@ -33,7 +33,7 @@ namespace InvoiceApp.Services
 		}
 
 
-		public Task<PagedList<Invoice>> Get(InvoiceRequestParemeters parameters, ClaimsPrincipal? user = null)
+		public Task<PagedList<Invoice>> Get(InvoiceRequestParameters parameters, ClaimsPrincipal? user = null)
 		{
 			if ((user is not null) && (user.IsInRole(UserRoles.Accountant)))
 			{

@@ -8,7 +8,7 @@ namespace InvoiceApp.Services.Interfaces
 {
     public interface IInvoiceService
     {
-        public Task<PagedList<Invoice>> Get(InvoiceRequestParemeters parameters, ClaimsPrincipal? user = null);
+        public Task<PagedList<Invoice>> Get(InvoiceRequestParameters parameters, ClaimsPrincipal? user = null);
 
         public Task<Invoice?> GetById(int id);
 

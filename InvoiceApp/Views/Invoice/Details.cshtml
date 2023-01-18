@@ -26,54 +26,51 @@
 <h2>Invoice details</h2>
 <hr class="mb-3" />
 
-<div class="container">
+<div class="container d-grid gap-md-0 gap-1">
 	<div class="row">
-		<div class="col-2 fw-bold">Document Id</div>
-		<div class="col-10">@Model.Id</div>
+		<div class="col-md-3  col-xl-2 col-12 fw-bold">Document Id</div>
+		<div class="col-md-9  col-xl-10 col-12">@Model.Id</div>
 	</div>
 	<div class="row">
-		<div class="col-2 fw-bold">Owner</div>
-		<div class="col-10">@Model.Owner?.Name</div>
+		<div class="col-md-3  col-xl-2 col-12 fw-bold">Owner</div>
+		<div class="col-md-9  col-xl-10 col-12">@Model.Owner?.Name</div>
 	</div>
 	<div class="row">
-		<div class="col-2 fw-bold">Amount</div>
-		<div class="col-10">@Model.Amount.ToSeparationString()</div>
+		<div class="col-md-3  col-xl-2 col-12 fw-bold">Amount</div>
+		<div class="col-md-9  col-xl-10 col-12">@Model.Amount.ToSeparationString()</div>
 	</div>
 	<div class="row">
-		<div class="col-2 fw-bold">Month</div>
-		<div class="col-10 ">@Model.Month.ToMonthString()</div>
+		<div class="col-md-3  col-xl-2 col-12 fw-bold">Month</div>
+		<div class="col-md-9  col-xl-10 col-12 ">@Model.Month.ToMonthString()</div>
 	</div>
 	<div class="row">
-		<div class="col-2 fw-bold">Status</div>
-		<div class="col-10 @statusClass">@Model.Status</div>
+		<div class="col-md-3  col-xl-2 col-12 fw-bold">Status</div>
+		<div class="col-md-9  col-xl-10 col-12 @statusClass">@Model.Status</div>
 	</div>
 	<div class="row">
-		<div class="col-2 fw-bold">Creation date</div>
-		<div class="col-10">@Model.CreationDate.ToDateWithTimeString()</div>
+		<div class="col-md-3  col-xl-2 col-12 fw-bold">Creation date</div>
+		<div class="col-md-9  col-xl-10 col-12">@Model.CreationDate.ToDateWithTimeString()</div>
 	</div>
 	<div class="row">
-		<div class="col-2 fw-bold">Creator</div>
-		<div class="col-10">@Model.Creator?.Name @Model.Creator?.Surname</div>
+		<div class="col-md-3  col-xl-2 col-12 fw-bold">Creator</div>
+		<div class="col-md-9  col-xl-10 col-12">@Model.Creator?.Name @Model.Creator?.Surname</div>
 	</div>
 	<div class="row">
-		<div class="col-2 fw-bold">Last update action</div>
-		<div class="col-10">@Model.LastUpdateAction</div>
+		<div class="col-md-3  col-xl-2 col-12 fw-bold">Last update action</div>
+		<div class="col-md-9  col-xl-10 col-12">@Model.LastUpdateAction</div>
 	</div>
 	<div class="row">
-		<div class="col-2 fw-bold">Last update date</div>
-		<div class="col-10">@Model.LastUpdateDate.ToDateWithTimeString()</div>
+		<div class="col-md-3  col-xl-2 col-12 fw-bold">Last update date</div>
+		<div class="col-md-9  col-xl-10 col-12">@Model.LastUpdateDate.ToDateWithTimeString()</div>
 	</div>
 	<div class="row">
-		<div class="col-2 fw-bold">Lats update author</div>
-		<div class="col-10">@Model.LastUpdateAuthor?.Name @Model.LastUpdateAuthor?.Surname</div>
-	</div>
-	<div class="row">
-		<a asp-action="Edit" asp-controller="Invoice" asp-route-id="@Model.Id" asp-route-returnUrl="@currentUrl" class="link link-primary">Edit</a>
+		<div class="col-md-3  col-xl-2 col-12 fw-bold">Lats update author</div>
+		<div class="col-md-9  col-xl-10 col-12">@Model.LastUpdateAuthor?.Name @Model.LastUpdateAuthor?.Surname</div>
 	</div>
 
 	@if (!isAccountant)
 	{
-		<div class="d-flex justify-content-start gap-2 my-3">
+		<div class="d-flex justify-content-start gap-2 my-2">
 			@if (Model.Status != InvoiceStatuses.Approved)
 			{
 				var href = Url.Action("ChangeStatus", "Invoice", new
@@ -97,6 +94,10 @@
 			}
 		</div>
 	}
+</div>
+
+<div class="container my-3">
+	<a asp-action="Edit" asp-controller="Invoice" asp-route-id="@Model.Id" asp-route-returnUrl="@currentUrl" class="link link-primary">Edit</a>
 </div>
 
 <div class="container">

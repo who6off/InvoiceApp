@@ -1,10 +1,47 @@
 ﻿@using System.Text.Json;
+@using InvoiceApp.Helpers;
 @model InvoiceApp.ViewModels.User.ProfileViewModel
 
 
 @{
 	ViewData["Title"] = "Profile";
+	var user = Model.User;
+	var returnUrl = Context.Request.Query.GetByKey("returnUrl", Url.Action("Index", "Home"));
 }
 
+<h2>Personal profile</h2>
+<hr class="mb-3"/>
 
-<pre>@JsonSerializer.Serialize(Model, new JsonSerializerOptions(){WriteIndented = true})</pre>
+<div class="container">
+	<div class="row">
+		<div class="col-md-3 col-lg-2 col-12 fw-bold">Personal ID</div>
+		<div class="col-md-9 col-lg-10 col-12">@user.Id</div>
+	</div>
+	<div class="row">
+		<div class="col-md-3 col-lg-2 col-12 fw-bold">Name</div>
+		<div class="col-md-9 col-lg-10 col-12">@user.Name</div>
+	</div>
+	<div class="row">
+		<div class="col-md-3 col-lg-2 col-12 fw-bold">Surname</div>
+		<div class="col-md-9 col-lg-10 col-12">@user.Surname</div>
+	</div>
+	<div class="row">
+		<div class="col-md-3 col-lg-2 col-12 fw-bold">Date of birth</div>
+		<div class="col-md-9 col-lg-10 col-12">@user.DateOfBirth.ToDayMonthString()</div>
+	</div>
+	<div class="row">
+		<div class="col-md-3 col-lg-2 col-12 fw-bold">Role</div>
+		<div class="col-md-9 col-lg-10 col-12">@user.RoleName</div>
+	</div>
+	<div class="row">
+		<div class="col-md-3 col-lg-2 col-12 fw-bold">Email</div>
+		<div class="col-md-9 col-lg-10 col-12">@user.Email</div>
+	</div>
+	
+</div>
+
+
+<div class="container my-3">
+	<a href="@returnUrl" class="link link-primary">Back</a>
+</div>
+

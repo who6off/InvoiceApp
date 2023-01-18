@@ -4,30 +4,35 @@
 @using InvoiceApp.Services.Interfaces;
 @using InvoiceApp.Models.Statistics;
 @using InvoiceApp.ViewModels.Statistics;
+@using Microsoft.AspNetCore.Http.Extensions;
 
 @inject ICompanyService _companyService;
 
 @model IndexViewModel
 
 @{
+	var StatisticsRequest = Model.StatisticsRequest;
 	var companies = await _companyService.GetAll();
+	var returnUrl = (string?)ViewData["returnUrl"];
+	var currentUrl = Context.Request.GetDisplayUrl();
 }
 
 <h2>Statistics</h2>
+<hr class="mb-3"/>
 
 <form 
 	asp-controller="Statistics"
 	asp-action="Index" 
-	method="post"
+	method="get"
 	id="statistics-form"
 	class="container d-grid gap-3 p-2 card"
 >
 	<div class="row form-group gy-1">
-		<div class="col-2">
+		<div class="col-md-2 col-12">
 			<label>Year: </label>
 		</div>
-		<div class="col-10">
-			<input asp-for="@Model.StatisticsRequest.Year" type="number" 
+		<div class="col-md-10 col-12">
+			<input asp-for="@StatisticsRequest.Year" name="Year" type="number" 
 				value="@Model.StatisticsRequest.Year" min="2000" max="2100"
 				class="form-control" 
 			/>
@@ -35,12 +40,13 @@
 	</div>
 
 	<div class="row form-group gy-1">
-		<div class="col-2">
+		<div class="col-md-2 col-12">
 			<label>Companies: </label>
 		</div>
-		<div class="col-10">
+		<div class="col-md-10 col-12">
 			<select 
-				asp-for="@Model.StatisticsRequest.Companies" 
+				asp-for="@StatisticsRequest.Companies"
+				name="Companies"
 				id="company-select"
 				class="mb-2 form-control"
 			>
@@ -57,16 +63,22 @@
 		</div>
 	</div>
 
-
 	<div class="row form-group gy-1">
 		<div class="col-12 text-end">
 			<input type="submit" value="Show" class="btn btn-primary" />
 		</div>
 	</div>
+	
+	<input type="hidden" name="returnUrl" value="@currentUrl"/>
+	
 </form>
 
 <div class="container">
   <canvas id="chart"></canvas>
+</div>
+
+<div class="container p-0 my-3">
+	<a href="@returnUrl" class="link link-primary">Back</a>
 </div>
 
 

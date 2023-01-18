@@ -14,6 +14,10 @@ span.field-validation-valid {
     display: none;
 }
 
+span.field-validation-error {
+    padding: 0 !important;
+}
+
 .validation-summary-errors > ul {
     padding: 0 0 0 0 !important;
     margin: 0 0 0 0 !important;

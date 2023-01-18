@@ -12,7 +12,10 @@
 
 @{
     ViewData["Title"] = "Invoices";
-    var returnUrl = Context.Request.GetDisplayUrl();
+    var clearHref = (string?)ViewData["clearHref"] ?? Url.Action("List", "Invoice");
+    var returnUrl = (string?)ViewData["returnUrl"] ?? Context.Request.Query.GetByKey("returnUrl", Url.Action("Index", "Invoice"));
+    var currentUrl = Context.Request.GetDisplayUrl();
+
     var (Invoices, Parameters) = (Model.Invoices, Model.Parameters);
     var companies = (await _companyService.GetAll())
         .Select(i => i.Name)
@@ -27,28 +30,28 @@
       class="search-form container card py-2 px-3 d-grid gap-2"
 >
     <div class="row p-0">
-        <div class="col-2 p-0 ">
+        <div class="col-md-2 col-12 p-0 ">
             <label class="form-label">Company:</label>
         </div>
-        <div class="col-10 p-0">
+        <div class="col-md-10 col-12 p-0">
             <select asp-for="@Parameters.CompanyName" name="CompanyName" asp-items="@companiesList" class="form-control"></select>
         </div>
     </div>
 
     <div class="row p-0">
-        <div class="col-2 p-0">
+        <div class="col-md-2 col-12 p-0">
             <label class="form-label">Month:</label>
         </div>
-        <div class="col-10 p-0">
+        <div class="col-md-10 col-12 p-0">
             <input name="Month" value="@Parameters?.Month?.ToString("yyyy-MM")" type="month" class="form-control" />
         </div>
     </div>
 
     <div class="row p-0">
-        <div class="col-2 p-0">
+        <div class="col-md-2 col-12 p-0">
             <label class="form-label">Status:</label>
         </div>
-        <div class="col-10 d-flex justify-content-start align-items-center gap-4 p-0">
+        <div class="col-md-10 col-12 d-flex justify-content-start align-items-center gap-4 p-0">
             <div class=" d-flex justify-content-start align-items-center gap-1">
                 <input type="checkbox" data-value="@InvoiceStatuses.Submitted" class="status-checkbox form-check-input" />
 				<span>@InvoiceStatuses.Submitted</span>
@@ -65,10 +68,16 @@
     </div>
 
     <div class="row p-0">
-        <div class="col p-0 d-flex justify-content-end align-items-center">
+        <div class="col p-0 d-flex justify-content-end align-items-center gap-2">
+            <a href="@clearHref" class="btn btn-warning m-0">Clear</a>
             <input value="Search" type="submit" class="btn btn-primary m-0" />
         </div>
     </div>
+
+    @if(ViewData["returnUrl"] is not null)
+    {
+        <input type="hidden" name="returnUrl" value="@returnUrl"/>
+    }
 </form>
 
 
@@ -99,7 +108,7 @@
             var editHreh = Url.Action("Edit", "Invoice", new
             {
                 id = item.Id,
-                returnUrl = Url.Action("Details", "Invoice", new { id = item.Id, returnUrl = returnUrl})
+                returnUrl = Url.Action("Details", "Invoice", new { id = item.Id, returnUrl = currentUrl})
             });
 
             <tr>
@@ -110,7 +119,7 @@
                 <td class="@statusClass">@item.Status</td>
                 <td>@item.LastUpdateDate.ToDateWithTimeString()</td>
                 <td>
-                        <a asp-controller="Invoice" asp-action="Details" asp-route-id="@item.Id" asp-route-returnUrl="@returnUrl" class="btn btn-sm btn-info">Detais</a>
+                        <a asp-controller="Invoice" asp-action="Details" asp-route-id="@item.Id" asp-route-returnUrl="@currentUrl" class="btn btn-sm btn-info">Detais</a>
                         <a href="@editHreh" class="btn btn-sm btn-warning">Edit</a>
                         <button data-modal="@deletionModalId" data-id="@item.Id"
                             data-ondelete="this.closest('tr').remove()"
@@ -132,6 +141,10 @@
     Data = Model.Invoices,
     Parameters = Model.Parameters
 })
+
+<div class="container my-3 p-0">
+    <a href="@returnUrl" class="link link-primary">Back</a>
+</div>
 
 @await Component.InvokeAsync("DeletionModal", new DeletionModalViewModel()
 {

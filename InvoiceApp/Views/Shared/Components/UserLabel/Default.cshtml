@@ -1,13 +1,18 @@
-﻿@model string?
+﻿@using Microsoft.AspNetCore.Http.Extensions;
+@model string?
+
+@{
+	var currentUrl = Context.Request.GetDisplayUrl();
+}
 
 @if (Model is null)
 {
-	<a asp-controller="User" asp-action="SignIn" asp-route-returnUrl="@Context.Request.Path" class="btn btn-primary">Sign In</a>
+	<a asp-controller="User" asp-action="SignIn" asp-route-returnUrl="@currentUrl" class="btn btn-primary">Sign In</a>
 }
 else
 {
 	<div class="gx-1">
-		<a asp-controller="User" asp-action="Profile" class="text-secondary text-decoration-none">
+		<a asp-controller="User" asp-action="Profile" asp-route-returnUrl="@currentUrl" class="text-secondary text-decoration-none">
 			<span><small>Signed in as</small> <strong>@Model</strong></span>
 		</a>
 		<a asp-controller="User" asp-action="SignOut" class="btn btn-primary">Sign Out</a>

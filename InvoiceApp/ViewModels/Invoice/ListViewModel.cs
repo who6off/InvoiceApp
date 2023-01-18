@@ -8,6 +8,6 @@ namespace InvoiceApp.ViewModels.Invoice
         public string ActionName { get; set; }
         public PagedList<Data.Models.Invoice> Invoices { get; set; }
 
-        public InvoiceRequestParemeters Parameters { get; set; }
+        public InvoiceRequestParameters Parameters { get; set; }
     }
 }

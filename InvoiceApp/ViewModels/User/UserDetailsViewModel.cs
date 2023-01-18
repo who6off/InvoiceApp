@@ -7,11 +7,13 @@ namespace InvoiceApp.ViewModels.User
 	{
 		public string Header { get; set; }
 
+		public string? ReturnUrl { get; set; }
+
+		public string? PrintText { get; set; }
+
 		public AppUser AppUser { get; set; }
 
 		public UserViewModel? UserViewModel { get; set; }
-
-		public string? ReturnUrl { get; set; }
 
 		public UserDetailsViewModel() { }
 

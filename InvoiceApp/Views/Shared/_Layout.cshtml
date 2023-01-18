@@ -1,8 +1,10 @@
 ﻿@using InvoiceApp.Identity.Constants;
 @using InvoiceApp.Identity.Helpers;
+@using Microsoft.AspNetCore.Http.Extensions;
 
 @{
     var userRole = this.Context.User?.GetRole();
+    var currentUrl = Context.Request.GetDisplayUrl();
 }
 
 
@@ -19,7 +21,7 @@
     <link rel="stylesheet" href="~/InvoiceApp.styles.css"/>
 </head>
 <body>
-    <header>
+    <header class="no-print">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">InvoiceApp</a>
@@ -44,7 +46,7 @@
                                     <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Users</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Statistics" asp-action="Index">Statistics</a>
+                                    <a class="nav-link text-dark" asp-controller="Statistics" asp-action="Index" asp-route-returnUrl="@currentUrl">Statistics</a>
                                 </li>
                             }
                         }
@@ -60,7 +62,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="no-print border-top footer text-muted">
         <div class="container">
             &copy; 2022 - InvoiceApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>

@@ -31,11 +31,17 @@ namespace InvoiceApp.Controllers
 		[HttpPost]
 		public async Task<IActionResult> SignIn(SignInViewModel model, string? returnUrl)
 		{
+			if (!ModelState.IsValid)
+			{
+				return View(model);
+			}
+
 			var user = await _userService.SignIn(model);
 
 			if (user is null)
 			{
-				ModelState.AddModelError("", "Invalid user credentials!");
+				ModelState.AddModelError(nameof(model.Email), " ");
+				ModelState.AddModelError(nameof(model.Password), "Invalid user credentials!");
 				return View(model);
 			}
 
@@ -104,6 +110,7 @@ namespace InvoiceApp.Controllers
 				AppUser = newUser,
 				UserViewModel = model,
 				Header = "User successfully registered!",
+				PrintText = "You have been registered in InvoiceApp. There are your user credentials to sign in.",
 				ReturnUrl = returnUrl,
 			});
 		}
@@ -167,6 +174,7 @@ namespace InvoiceApp.Controllers
 				AppUser = user,
 				UserViewModel = model,
 				Header = "User's information updated",
+				PrintText = "Your user credentials to sign in have been changed!",
 				ReturnUrl = returnUrl,
 			});
 		}

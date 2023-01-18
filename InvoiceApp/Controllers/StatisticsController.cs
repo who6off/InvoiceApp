@@ -13,20 +13,23 @@ namespace InvoiceApp.Controllers
 		}
 
 
-		public async Task<IActionResult> Index()
+		[HttpGet]
+		public async Task<IActionResult> Index([FromQuery] StatisticRequestViewModel requestVM, string? returnUrl)
 		{
-			return View(new IndexViewModel());
-		}
+			ViewData["returnUrl"] = returnUrl;
 
+			if (Request.Query.Count < 2)
+			{
+				return View(new IndexViewModel());
+			}
 
-		[HttpPost]
-		public async Task<IActionResult> Index(IndexViewModel model)
-		{
-			var statistics = await _statisticsService.GetYearRevenueStatistics(model.StatisticsRequest);
+			var statistics = await _statisticsService.GetYearRevenueStatistics(requestVM);
 
-			model.Statistics = statistics;
-
-			return View(model);
+			return View(new IndexViewModel()
+			{
+				StatisticsRequest = requestVM,
+				Statistics = statistics,
+			});
 		}
 	}
 }
