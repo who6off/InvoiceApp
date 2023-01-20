@@ -1,0 +1,29 @@
+--Delete Views--
+DECLARE @SqlView VARCHAR(MAX) = ''
+        , @Crlf VARCHAR(2) = CHAR(13) + CHAR(10);
+
+SELECT @SqlView = @SqlView + 'DROP VIEW ' + QUOTENAME(SCHEMA_NAME(schema_id)) + '.' + QUOTENAME(v.name) +';' + @Crlf
+FROM   sys.views v;
+
+EXEC(@SqlView);
+
+
+--Delete Tables---
+DECLARE @SqlTable NVARCHAR(500) DECLARE @Cursor CURSOR
+
+SET @Cursor = CURSOR FAST_FORWARD FOR
+SELECT DISTINCT sql = 'ALTER TABLE [' + tc2.TABLE_SCHEMA + '].[' +  tc2.TABLE_NAME + '] DROP [' + rc1.CONSTRAINT_NAME + '];'
+FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS rc1
+LEFT JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc2 ON tc2.CONSTRAINT_NAME =rc1.CONSTRAINT_NAME
+
+OPEN @Cursor FETCH NEXT FROM @Cursor INTO @SqlTable
+
+WHILE (@@FETCH_STATUS = 0)
+BEGIN
+Exec sp_executesql @SqlTable
+FETCH NEXT FROM @Cursor INTO @SqlTable
+END
+
+CLOSE @Cursor DEALLOCATE @Cursor
+
+EXEC sp_MSforeachtable 'DROP TABLE ?'

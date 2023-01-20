@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="SQL\Views\" />
     <Folder Include="wwwroot\lib\auto-complete\css\" />
     <Folder Include="wwwroot\lib\auto-complete\js\" />
   </ItemGroup>

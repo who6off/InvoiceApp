@@ -1,8 +1,4 @@
-IF OBJECT_ID('dbo.InvoiceView', 'V') IS NOT NULL
-    DROP VIEW dbo.InvoiceView
-GO
-
-CREATE VIEW [InvoiceView] AS 
+CREATE OR ALTER VIEW [InvoicesView] AS 
 SELECT 
 	[Id], 
 	[OwnerId],
