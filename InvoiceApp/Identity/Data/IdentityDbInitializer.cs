@@ -13,20 +13,29 @@ namespace InvoiceApp.Identity.Data
 				.GetSection(IdentityDbInitializerOptions.SectionName)
 				.Get<IdentityDbInitializerOptions>();
 
-			if (!options.IsDataSeedingRequired) return;
+			if (!options.IsDataSeedingRequired)
+			{
+				return;
+			}
 
 			using (var scope = serviceProvider.CreateScope())
 			{
-				await SeedRoles(scope, options);
+				var provider = scope.ServiceProvider;
 
-				await SeedAdmin(scope, options);
+				var dbContext = provider.GetService<AppIdentityDbContext>();
+				await dbContext.Database.EnsureDeletedAsync();
+				await dbContext.Database.EnsureCreatedAsync();
+
+				await SeedRoles(provider, options);
+
+				await SeedAdmin(provider, options);
 			}
 		}
 
 
-		private static async Task<IdentityResult[]> SeedRoles(IServiceScope scope, IdentityDbInitializerOptions options)
+		private static async Task<IdentityResult[]> SeedRoles(IServiceProvider provider, IdentityDbInitializerOptions options)
 		{
-			var roleManager = scope.ServiceProvider.GetService<RoleManager<AppRole>>();
+			var roleManager = provider.GetService<RoleManager<AppRole>>();
 
 			var result = new IdentityResult[options.Roles.Length];
 			for (int i = 0; i < options.Roles.Length; i++)
@@ -38,9 +47,9 @@ namespace InvoiceApp.Identity.Data
 		}
 
 
-		private static Task<AppUser?> SeedAdmin(IServiceScope scope, IdentityDbInitializerOptions options)
+		private static Task<AppUser?> SeedAdmin(IServiceProvider provider, IdentityDbInitializerOptions options)
 		{
-			var userService = scope.ServiceProvider.GetService<IUserService>();
+			var userService = provider.GetService<IUserService>();
 
 			return userService.Create(new UserViewModel()
 			{
@@ -58,7 +67,7 @@ namespace InvoiceApp.Identity.Data
 
 	public class IdentityDbInitializerOptions
 	{
-		public const string SectionName = "Identity";
+		public const string SectionName = "IdentityDb";
 		public bool IsDataSeedingRequired { get; set; }
 		public int MinEmployeeAge { get; set; }
 		public string[] Roles { get; set; }
