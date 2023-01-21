@@ -20,9 +20,9 @@ namespace InvoiceApp.Data
 			var hostEnvironment = serviceProvider.GetService<IWebHostEnvironment>();
 
 			var rootPath = hostEnvironment.ContentRootPath;
-			var clearScriptPath = Path.Combine(rootPath, options.SchemaFolder, options.ClearScriptFile);
-			var schemaScriptPath = Path.Combine(rootPath, options.SchemaFolder, options.SchemaFile);
-			var viewsDirectory = Path.Combine(rootPath, options.SchemaFolder, options.ViewsDirectory);
+			var clearScriptPath = Path.Combine(rootPath, options.SqlScriptsFolder, options.ClearScriptFile);
+			var schemaScriptPath = Path.Combine(rootPath, options.SqlScriptsFolder, options.SchemaScriptFile);
+			var viewsDirectory = Path.Combine(rootPath, options.SqlScriptsFolder, options.ViewsDirectory);
 
 			using (var connection = context.CreateConnection())
 			{
@@ -55,9 +55,9 @@ namespace InvoiceApp.Data
 		public const string SectionName = "MainDb";
 
 		public bool IsDataSeedingRequired { get; set; }
-		public string SchemaFolder { get; set; }
+		public string SqlScriptsFolder { get; set; }
 		public string ClearScriptFile { get; set; }
-		public string SchemaFile { get; set; }
+		public string SchemaScriptFile { get; set; }
 		public string ViewsDirectory { get; set; }
 		public string[] Views { get; set; }
 	}

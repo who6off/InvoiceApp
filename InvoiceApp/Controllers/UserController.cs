@@ -52,6 +52,7 @@ namespace InvoiceApp.Controllers
 
 
 		[HttpGet]
+		[Authorize]
 		public async Task<IActionResult> SignOut()
 		{
 			await _userService.SignOut();
